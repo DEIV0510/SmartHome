@@ -70,20 +70,18 @@ body:hover #cur{opacity:1}
 .l-od-a{background:var(--gold);box-shadow:0 0 8px var(--gold),0 0 18px rgba(201,168,76,.5)}
 .l-od-b{background:var(--blue);box-shadow:0 0 7px var(--blue),0 0 14px rgba(0,212,255,.4)}
 .l-od-c{background:rgba(201,168,76,.4);box-shadow:0 0 5px rgba(201,168,76,.45)}
-/* logo centerpiece — white badge container */
+/* logo centerpiece — transparent, renders above panels */
 #l-logo{
-  position:absolute;width:120px;height:120px;
+  position:absolute;width:150px;height:150px;
   display:flex;align-items:center;justify-content:center;
-  z-index:2;opacity:0;
-  background:#fff;border-radius:18px;padding:8px;
-  box-shadow:0 0 32px rgba(201,168,76,.55),0 0 64px rgba(201,168,76,.2),0 6px 22px rgba(0,0,0,.55);
+  z-index:12;opacity:0;
 }
 #l-logo::before{
-  content:'';position:absolute;inset:-22px;border-radius:50%;
-  background:radial-gradient(circle,rgba(201,168,76,.22) 0%,transparent 70%);
+  content:'';position:absolute;inset:-28px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,168,76,.20) 0%,transparent 70%);
   pointer-events:none;z-index:-1;
 }
-#l-logo img{width:100%;height:100%;object-fit:contain;display:block}
+#l-logo img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 0 18px rgba(201,168,76,.55)) drop-shadow(0 0 36px rgba(201,168,76,.25))}
 /* text block */
 .l-text{position:relative;z-index:2;text-align:center}
 .l-brow{display:flex;align-items:center;justify-content:center;overflow:hidden;height:1.4em}
@@ -98,7 +96,7 @@ body:hover #cur{opacity:1}
 @keyframes l-shim{from{background-position:-60px 0}to{background-position:220px 0}}
 .l-pct{text-align:right;font-size:.6rem;font-family:'Space Grotesk',sans-serif;font-weight:700;color:rgba(255,255,255,.32);letter-spacing:.1em;margin-top:.45rem}
 /* exit panels */
-.l-pnl{position:absolute;top:0;width:50%;height:100%;background:var(--bg);z-index:10}
+.l-pnl{position:absolute;top:0;width:50%;height:100%;background:var(--bg);z-index:1}
 .l-pnl-l{left:0}
 .l-pnl-r{right:0}
 
@@ -109,7 +107,7 @@ body:hover #cur{opacity:1}
 nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:1.25rem 2rem;transition:all .4s;display:flex;align-items:center;justify-content:space-between}
 nav.solid{background:rgba(4,8,17,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,.08)}
 .nav-logo{display:flex;align-items:center;gap:.75rem}
-.nav-logo img{height:40px;width:auto;background:#fff;border-radius:8px;padding:3px;box-shadow:0 0 10px rgba(201,168,76,.3)}
+.nav-logo img{height:44px;width:auto;filter:drop-shadow(0 0 6px rgba(201,168,76,.5))}
 .nav-logo span{font-size:.75rem;font-weight:700;letter-spacing:.12em;color:var(--gold-l)}
 .nav-links{display:flex;align-items:center;gap:2.5rem}
 .nav-links a{font-size:.8rem;color:rgba(232,237,245,.55);font-weight:500;text-decoration:none;transition:color .2s;letter-spacing:.04em}
@@ -274,7 +272,7 @@ section{position:relative;overflow:hidden}
 footer{background:var(--bg3);border-top:1px solid rgba(201,168,76,.08);padding:2.5rem 0}
 .footer-inner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem}
 .footer-brand{display:flex;align-items:center;gap:.75rem}
-.footer-brand img{height:40px;background:rgba(255,255,255,.92);border-radius:8px;padding:3px;box-shadow:0 0 10px rgba(201,168,76,.25)}
+.footer-brand img{height:44px;filter:drop-shadow(0 0 6px rgba(201,168,76,.4))}
 .footer-brand div{font-size:.75rem;color:rgba(232,237,245,.4);font-family:'Inter',sans-serif;line-height:1.5}
 .footer-disc{font-size:.65rem;color:rgba(232,237,245,.2);font-family:'Inter',sans-serif;max-width:360px;line-height:1.6}
 
@@ -679,7 +677,7 @@ footer{background:var(--bg3);border-top:1px solid rgba(201,168,76,.08);padding:2
             <div class="ring-dot2" style="background:var(--blue)"></div>
             <div class="ring-dot3" style="background:var(--neon)"></div>
             <div class="ring-center">
-              <img src="logoia.png" alt="SHTAI" style="width:56px;height:56px;object-fit:contain;margin-bottom:.4rem;background:#fff;border-radius:10px;padding:4px;box-shadow:0 0 14px rgba(201,168,76,.35)">
+              <img src="logoia.png" alt="SHTAI" style="width:64px;height:64px;object-fit:contain;margin-bottom:.4rem;filter:drop-shadow(0 0 8px rgba(201,168,76,.6))">
               <span style="font-size:.6rem;font-weight:700;letter-spacing:.2em;color:var(--gold-l)">SHTAI</span>
               <span style="font-size:.55rem;color:rgba(232,237,245,.35);font-family:'Inter',sans-serif">ERC-20</span>
             </div>
@@ -909,6 +907,32 @@ footer{background:var(--bg3);border-top:1px solid rgba(201,168,76,.08);padding:2
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
+/* ── LOGO WHITE-BG REMOVAL (canvas) ─────── */
+(function(){
+  function removeBg(img){
+    if(img.dataset.rb) return; img.dataset.rb='1';
+    const run=()=>{
+      try{
+        const c=document.createElement('canvas');
+        c.width=img.naturalWidth; c.height=img.naturalHeight;
+        const x=c.getContext('2d');
+        x.drawImage(img,0,0);
+        const d=x.getImageData(0,0,c.width,c.height), px=d.data;
+        for(let i=0;i<px.length;i+=4){
+          const r=px[i],g=px[i+1],b=px[i+2];
+          const dist=Math.sqrt((255-r)**2+(255-g)**2+(255-b)**2);
+          if(dist<50) px[i+3]=dist<12?0:Math.round((dist-12)/38*255);
+        }
+        x.putImageData(d,0,0);
+        img.src=c.toDataURL('image/png');
+      }catch(e){}
+    };
+    if(img.complete&&img.naturalWidth>0) run();
+    else img.addEventListener('load',run,{once:true});
+  }
+  document.querySelectorAll('img[src="logoia.png"]').forEach(removeBg);
+})();
+
 /* ── CURSOR ──────────────────────────────── */
 const cur = document.getElementById('cur');
 const cur2 = document.getElementById('cur2');
@@ -1035,8 +1059,8 @@ document.querySelectorAll('.magnetic').forEach(el => {
 
     /* ── EXIT SEQUENCE ── */
     /* logo gold flare */
-    .to('#l-logo',{
-      boxShadow:'0 0 80px rgba(201,168,76,1), 0 0 160px rgba(201,168,76,.7), 0 6px 22px rgba(0,0,0,.55)',
+    .to('#l-logo img',{
+      filter:'drop-shadow(0 0 55px rgba(201,168,76,1)) drop-shadow(0 0 110px rgba(201,168,76,.8))',
       duration:.28,ease:'power2.in'
     })
     /* rings & dots fade */

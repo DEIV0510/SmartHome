@@ -117,7 +117,7 @@ nav.solid{background:rgba(4,10,28,.94);backdrop-filter:blur(24px);border-bottom:
 .nav-cta:hover{transform:translateY(-2px);box-shadow:0 0 24px rgba(0,255,136,.45)}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
 .hamburger span{display:block;width:22px;height:1.5px;background:var(--gold-l);transition:all .3s}
-#mob-menu{display:none;position:fixed;inset:0;z-index:490;background:rgba(4,8,17,.97);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:2rem}
+#mob-menu{display:none;position:fixed;inset:0;z-index:490;background:rgba(4,10,28,.97);backdrop-filter:blur(24px);flex-direction:column;align-items:center;justify-content:center;gap:2rem}
 #mob-menu a{font-size:1.5rem;color:rgba(180,205,235,.85);text-decoration:none;font-weight:600;transition:color .2s}
 #mob-menu a:hover{color:var(--gold-l)}
 #mob-menu.open{display:flex}
@@ -289,18 +289,149 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
 .wa:hover{transform:scale(1.12)}
 @keyframes wa-pulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.45)}50%{box-shadow:0 4px 40px rgba(37,211,102,.8),0 0 0 8px rgba(37,211,102,.1)}}
 
+/* ─── LIGHT SECTIONS ───────────────────────────────── */
+.sec-light{background:#EEF3FF}
+.sec-light::before{background:linear-gradient(90deg,transparent,rgba(13,30,80,.18) 50%,transparent)!important}
+.sec-light h2,.sec-light h3,.sec-light h4{color:#0A1628}
+.sec-light .tag{color:var(--gold-d);opacity:1}
+.sec-light .badge{background:rgba(160,120,30,.09);border-color:rgba(160,120,30,.30)}
+.sec-light .badge span{color:#8A6020}
+.sec-light .g{background:#fff;border-color:rgba(13,30,80,.12);box-shadow:0 4px 28px rgba(13,30,60,.09),inset 0 1px 0 rgba(255,255,255,.9)}
+.sec-light .g-blue{background:#E8F4FF;border-color:rgba(0,100,200,.16);box-shadow:0 4px 28px rgba(0,60,140,.07)}
+.sec-light .b-card p{color:#3D5070}
+.sec-light .b-card h3{color:#0A1628}
+.sec-light .b-card:hover{border-color:rgba(160,120,30,.45);box-shadow:0 16px 48px rgba(13,30,60,.14)}
+.sec-light .step{background:#fff;border-color:rgba(13,30,80,.12);box-shadow:0 4px 24px rgba(13,30,60,.08)!important}
+.sec-light .step h4{color:#0A1628}
+.sec-light .step p{color:#3D5070!important}
+.sec-light .step:hover{border-color:rgba(160,120,30,.45);box-shadow:0 16px 48px rgba(13,30,60,.14)!important}
+.sec-light .feat-card{background:#fff;border-color:rgba(13,30,80,.12)}
+.sec-light .feat-card:hover{border-color:rgba(160,120,30,.40)}
+.sec-light .feat-lbl{color:#3D5070}
+.sec-light .faq-q span:first-child{color:#0A1628}
+.sec-light .faq-item{border-color:rgba(13,30,80,.14)}
+.sec-light .faq-a p{color:#3D5070!important}
+.sec-light .faq-icon{border-color:rgba(13,30,80,.25)}
+.sec-light p{color:#3D5070}
+.sec-light .stat-lbl{color:#4A6080}
+.sec-light .stat-card.g{background:#fff}
+.sec-light .stat-card.g-blue{background:#E8F4FF;border-color:rgba(0,100,200,.18)}
+.sec-light .step-conn{background:linear-gradient(90deg,rgba(13,30,80,.18),transparent)}
+
 /* ─── RESPONSIVE ───────────────────────────────────── */
+/* — Tablet (≤900px) — */
 @media(max-width:900px){
+  /* nav */
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  nav{padding:1rem 1.25rem}
+
+  /* layout stacks */
   .benefits-grid,.project-grid,.token-grid{grid-template-columns:1fr}
   .steps-grid{grid-template-columns:1fr 1fr}
   .hero-stats{grid-template-columns:1fr 1fr}
-  .nav-links,.nav-cta{display:none}
-  .hamburger{display:flex}
-  .ring-wrap{margin-bottom:2rem}
+
+  /* hero */
+  #hero{padding-top:4.5rem}
+  .hero-h1{font-size:clamp(2rem,8vw,3.8rem)}
+  .hero-btns{flex-direction:column;align-items:flex-start}
+  .hero-btns .btn{width:100%;justify-content:center}
+
+  /* sections spacing */
+  .wrap{padding:0 1.25rem}
+  #benefits .wrap,#project .wrap,#token .wrap,
+  #steps .wrap,#dashboard .wrap,#faq .wrap,#gallery .wrap{padding-top:4.5rem!important;padding-bottom:4.5rem!important}
+  #faq{padding-top:4.5rem!important;padding-bottom:4.5rem!important}
+  #cta{padding:4.5rem 1.25rem!important}
+
+  /* project */
+  .project-grid{gap:2.5rem}
+  .ring-wrap{margin:0 auto 2rem}
+  .token-grid{gap:2rem}
+
+  /* steps */
+  .steps-grid{gap:1rem}
+
+  /* gallery */
+  .gallery-grid{grid-template-columns:1fr;gap:1rem}
+  .g-card img{height:220px}
+  .g-card:first-child img{height:260px}
+
+  /* cta */
+  .cta-h{font-size:clamp(1.8rem,7vw,3rem)}
+  .cta-trust{flex-direction:column;align-items:center;gap:1rem}
 }
-@media(max-width:500px){
-  .hero-stats,.steps-grid{grid-template-columns:1fr 1fr}
-  .proj-feat{grid-template-columns:1fr 1fr}
+
+/* — Mobile (≤600px) — */
+@media(max-width:600px){
+  /* section padding */
+  #benefits .wrap,#project .wrap,#token .wrap,
+  #steps .wrap,#dashboard .wrap,#faq .wrap,
+  #gallery .wrap{padding-top:3.5rem!important;padding-bottom:3.5rem!important}
+  #faq{padding-top:3.5rem!important;padding-bottom:3.5rem!important}
+  #cta{padding:3.5rem 1.25rem!important}
+
+  /* nav logo size */
+  .nav-logo img{height:52px}
+
+  /* hero */
+  #hero{padding-top:4rem}
+  .hero-h1{font-size:clamp(1.9rem,9vw,3rem);letter-spacing:-.01em}
+  .hero-sub{font-size:.92rem}
+  .hero-stats{gap:.6rem;margin-top:2rem}
+  .stat-card{padding:.8rem .6rem}
+  .stat-num{font-size:1.5rem}
+
+  /* benefits grid: 1 col */
+  .benefits-grid{grid-template-columns:1fr;gap:.85rem}
+  .b-card{padding:1.5rem}
+
+  /* project */
+  .proj-feat{grid-template-columns:1fr 1fr;gap:.65rem}
+  .feat-card{padding:1rem}
+  .feat-num{font-size:1.5rem}
+
+  /* ring */
+  .ring-wrap{width:200px;height:200px}
+  .ring-center{inset:45px}
+
+  /* steps: 1 col on small mobile */
+  .steps-grid{grid-template-columns:1fr;gap:.85rem}
+  .step{padding:1.5rem 1.25rem}
+  .step-n{font-size:2.2rem}
+
+  /* dashboard */
+  .dash-phone{padding:1.25rem}
+  .dash-total{font-size:1.6rem}
+  .dash-metrics{gap:.45rem}
+
+  /* faq */
+  .faq-q{padding:1rem 0;min-height:48px}
+  .faq-item.open .faq-a{max-height:200px}
+
+  /* gallery */
+  .gallery-grid{gap:.75rem}
+  .g-card img,.g-card:first-child img{height:200px}
+
+  /* footer */
+  .footer-inner{flex-direction:column;align-items:flex-start;gap:1.25rem}
+  .footer-disc{max-width:100%}
+
+  /* buttons */
+  .btn-g,.btn-o{padding:.85rem 1.5rem;font-size:.85rem}
+  .cta-inner .btn{width:100%;justify-content:center;margin:.35rem 0}
+  .cta-inner{padding:0 1rem}
+
+  /* hide cursor on touch */
+  #cur,#cur2{display:none}
+}
+
+/* — Small phone (≤375px) — */
+@media(max-width:375px){
+  .hero-h1{font-size:1.75rem}
+  .proj-feat{grid-template-columns:1fr}
+  .hero-stats{grid-template-columns:1fr 1fr}
+  .dm{padding:.65rem .5rem}
 }
 
 /* ─── REVEAL HELPERS ───────────────────────────────── */
@@ -319,7 +450,7 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
 .g-card img{width:100%;height:300px;object-fit:cover;display:block;transition:transform .7s ease}
 .g-card:first-child img{height:370px}
 .g-card:hover img{transform:scale(1.06)}
-.g-card-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(4,8,17,.92) 0%,rgba(4,8,17,.35) 45%,transparent 100%);display:flex;align-items:flex-end;padding:1.5rem}
+.g-card-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(4,10,28,.94) 0%,rgba(4,10,28,.35) 50%,transparent 100%);display:flex;align-items:flex-end;padding:1.5rem}
 .g-badge{display:inline-block;background:rgba(201,168,76,.14);border:1px solid rgba(201,168,76,.38);border-radius:50px;padding:.22rem .78rem;font-size:.58rem;font-weight:700;letter-spacing:.14em;color:var(--gold-l);margin-bottom:.55rem;text-transform:uppercase}
 .g-title{font-size:1.05rem;font-weight:700;color:#E8EDF5;margin-bottom:.28rem}
 .g-desc{font-size:.75rem;color:rgba(175,200,232,.78);font-family:'Inter',sans-serif;line-height:1.55}
@@ -471,7 +602,7 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
 </section>
 
 <!-- ══════════ BENEFITS ══════════ -->
-<section id="benefits">
+<section id="benefits" class="sec-light">
   <div class="wrap" style="padding:7rem 1.5rem">
     <div style="max-width:520px;margin-bottom:3.5rem" class="reveal-l">
       <span class="tag">Por Qué Elegirnos</span>
@@ -745,7 +876,7 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
 </section>
 
 <!-- ══════════ STEPS ══════════ -->
-<section id="steps">
+<section id="steps" class="sec-light">
   <div class="wrap" style="padding:7rem 1.5rem">
     <div style="text-align:center;margin-bottom:3.5rem" class="reveal">
       <span class="tag">Cómo Participar</span>
@@ -853,7 +984,7 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
 </section>
 
 <!-- ══════════ FAQ ══════════ -->
-<section id="faq" style="padding:7rem 0">
+<section id="faq" class="sec-light" style="padding:7rem 0">
   <div class="wrap" style="max-width:700px">
     <div style="text-align:center;margin-bottom:3rem" class="reveal">
       <span class="tag">FAQ</span>

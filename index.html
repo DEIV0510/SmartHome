@@ -434,9 +434,11 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
   /* section padding */
   #benefits .wrap,#project .wrap,#token .wrap,
   #steps .wrap,#dashboard .wrap,#faq .wrap,
-  #gallery .wrap{padding-top:3.5rem!important;padding-bottom:3.5rem!important}
-  #faq{padding-top:3.5rem!important;padding-bottom:3.5rem!important}
-  #cta{padding:3.5rem 1.25rem!important}
+  #gallery .wrap{padding-top:2.5rem!important;padding-bottom:2.5rem!important}
+  #faq{padding-top:2.5rem!important;padding-bottom:2.5rem!important}
+  #cta{padding:2.5rem 1.25rem!important}
+  /* project SVG illustration: reduce height on mobile */
+  #project .reveal-l svg{max-height:220px}
 
   /* nav */
   .nav-logo img{height:52px}
@@ -1469,19 +1471,26 @@ document.getElementById('ham').addEventListener('click',()=>{
 function closeMob(){document.getElementById('mob-menu').classList.remove('open');}
 
 /* ── SCROLL REVEALS ──────────────────────── */
-const revealCfg = { start:'top 84%', toggleActions:'play none none none' };
-gsap.utils.toArray('.reveal').forEach((el,i)=>{
-  gsap.to(el,{ scrollTrigger:{trigger:el,...revealCfg}, opacity:1,y:0, duration:.75, delay:i*.04>0.25?0.25:i*.04, ease:'power3.out'});
-});
-gsap.utils.toArray('.reveal-l').forEach(el=>{
-  gsap.to(el,{ scrollTrigger:{trigger:el,...revealCfg}, opacity:1,x:0, duration:.8, ease:'power3.out'});
-});
-gsap.utils.toArray('.reveal-r').forEach(el=>{
-  gsap.to(el,{ scrollTrigger:{trigger:el,...revealCfg}, opacity:1,x:0, duration:.8, ease:'power3.out'});
-});
-gsap.utils.toArray('.reveal-s').forEach(el=>{
-  gsap.to(el,{ scrollTrigger:{trigger:el,...revealCfg}, opacity:1,scale:1, duration:.9, ease:'back.out(1.4)'});
-});
+if(window.innerWidth > 768){
+  const revealCfg = { start:'top 88%', toggleActions:'play none none none' };
+  gsap.utils.toArray('.reveal').forEach((el,i)=>{
+    gsap.to(el,{ scrollTrigger:{trigger:el,...revealCfg}, opacity:1,y:0, duration:.75, delay:i*.04>0.25?0.25:i*.04, ease:'power3.out'});
+  });
+  gsap.utils.toArray('.reveal-l').forEach(el=>{
+    gsap.to(el,{ scrollTrigger:{trigger:el,...revealCfg}, opacity:1,x:0, duration:.8, ease:'power3.out'});
+  });
+  gsap.utils.toArray('.reveal-r').forEach(el=>{
+    gsap.to(el,{ scrollTrigger:{trigger:el,...revealCfg}, opacity:1,x:0, duration:.8, ease:'power3.out'});
+  });
+  gsap.utils.toArray('.reveal-s').forEach(el=>{
+    gsap.to(el,{ scrollTrigger:{trigger:el,...revealCfg}, opacity:1,scale:1, duration:.9, ease:'back.out(1.4)'});
+  });
+} else {
+  /* Mobile: show everything immediately, no invisible dead space */
+  gsap.utils.toArray('.reveal,.reveal-l,.reveal-r,.reveal-s').forEach(el=>{
+    gsap.set(el,{opacity:1,x:0,y:0,scale:1});
+  });
+}
 
 /* ── PARALLAX ORBS ───────────────────────── */
 window.addEventListener('mousemove', e => {

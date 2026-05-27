@@ -157,7 +157,6 @@ section{position:relative;overflow:hidden}
 .wrap{max-width:1100px;margin:0 auto;padding:0 1.5rem}
 
 /* ─── HERO ─────────────────────────────────────────── */
-#hero{min-height:100svh;display:flex;align-items:center;padding-top:5rem}
 .hero-eyebrow{opacity:0}
 .hero-h1{font-size:clamp(2.4rem,6vw,5.2rem);font-weight:800;line-height:1.05;letter-spacing:-.02em}
 .hero-h1 .line{display:block;overflow:hidden}
@@ -288,6 +287,72 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
 .wa{position:fixed;bottom:2rem;right:2rem;z-index:800;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#25D366,#128C7E);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.45);cursor:pointer;text-decoration:none;transition:transform .3s;animation:wa-pulse 3s ease-in-out infinite}
 .wa:hover{transform:scale(1.12)}
 @keyframes wa-pulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.45)}50%{box-shadow:0 4px 40px rgba(37,211,102,.8),0 0 0 8px rgba(37,211,102,.1)}}
+
+/* ─── HERO TWO-COLUMN ──────────────────────────────── */
+#hero{min-height:100svh;display:flex;align-items:center;padding-top:5rem}
+.hero-inner{display:grid;grid-template-columns:1.1fr 1fr;gap:3.5rem;align-items:center;width:100%;padding:2rem 0}
+.hero-left{}
+
+/* right visual wrapper */
+.hero-right{position:relative;padding:2rem 1rem 2rem 0}
+.hi-ring-glow{position:absolute;inset:-80px;background:radial-gradient(ellipse,rgba(212,168,76,.15) 0%,transparent 65%);pointer-events:none;z-index:0;border-radius:50%}
+
+/* main token card */
+.hi-card{position:relative;z-index:1;background:rgba(6,14,40,.90);border:1px solid rgba(212,168,76,.38);border-radius:1.75rem;padding:1.5rem;backdrop-filter:blur(28px);box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 64px rgba(212,168,76,.10),inset 0 1px 0 rgba(255,255,255,.07)}
+
+/* card top row */
+.hi-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;margin-bottom:1.5rem}
+.hi-brand{display:flex;align-items:center;gap:.75rem;min-width:0}
+.hi-logo{width:42px;height:42px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 7px rgba(212,168,76,.55))}
+.hi-tname{font-size:.9rem;font-weight:700;color:#EDF2FF;line-height:1.2}
+.hi-ticker{display:block;font-size:.6rem;color:rgba(175,200,232,.58);font-family:'Inter',sans-serif;letter-spacing:.05em;font-style:normal;margin-top:.25rem}
+.hi-live-badge{display:flex;align-items:center;gap:.4rem;background:rgba(0,255,136,.10);border:1px solid rgba(0,255,136,.30);border-radius:50px;padding:.3rem .8rem;font-size:.58rem;font-weight:700;letter-spacing:.12em;color:var(--neon);flex-shrink:0;white-space:nowrap}
+
+/* progress */
+.hi-prog-wrap{margin-bottom:1.4rem}
+.hi-prog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.hi-prog-head span:first-child{font-size:.68rem;color:rgba(175,200,232,.60);font-family:'Inter',sans-serif}
+.hi-pct{font-size:.8rem;font-weight:800;color:var(--gold-l);font-family:'Space Grotesk',sans-serif}
+.hi-prog-bar{height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden}
+.hi-prog-fill{height:100%;width:62%;background:linear-gradient(90deg,var(--gold-d),var(--gold-l) 55%,rgba(0,255,136,.85));border-radius:4px;position:relative}
+.hi-prog-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);background-size:50px 100%;animation:l-shim 1.6s linear infinite}
+.hi-prog-foot{display:flex;justify-content:space-between;font-size:.62rem;color:rgba(175,200,232,.48);font-family:'Inter',sans-serif;margin-top:.42rem}
+
+/* metrics */
+.hi-metrics{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.06);border-radius:1rem;padding:1rem .8rem;margin-bottom:1.2rem;gap:.5rem}
+.hi-div{width:1px;height:2rem;background:rgba(255,255,255,.09)}
+.hi-metric{text-align:center}
+.hi-ml{display:block;font-size:.54rem;font-family:'Inter',sans-serif;color:rgba(175,200,232,.52);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.3rem}
+.hi-mv{display:block;font-size:1.05rem;font-weight:800;line-height:1}
+.hi-ms{display:block;font-size:.56rem;color:rgba(175,200,232,.42);font-family:'Inter',sans-serif;margin-top:.18rem}
+
+/* income source chips */
+.hi-sources{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:1.25rem}
+.hi-src{background:rgba(255,255,255,.04);border:1px solid rgba(212,168,76,.14);border-radius:.75rem;padding:.65rem .3rem;text-align:center;transition:all .25s}
+.hi-src:hover{border-color:rgba(212,168,76,.38);background:rgba(212,168,76,.07);transform:translateY(-2px)}
+.hi-src svg{display:block;margin:0 auto .32rem}
+.hi-src span{font-size:.58rem;font-family:'Inter',sans-serif;color:rgba(175,200,232,.70);display:block}
+
+/* floating accent cards */
+.hi-float{position:absolute;display:flex;align-items:center;gap:.65rem;padding:.72rem 1rem;border-radius:1rem;background:rgba(6,14,40,.92)!important;border:1px solid rgba(212,168,76,.30)!important;box-shadow:0 12px 40px rgba(0,0,0,.5)!important;white-space:nowrap;z-index:3}
+.hi-float strong{display:block;font-size:.75rem;font-weight:700;color:#EDF2FF;line-height:1.2}
+.hi-float span{display:block;font-size:.60rem;color:rgba(175,200,232,.60);font-family:'Inter',sans-serif;margin-top:.12rem}
+.hi-float-a{top:-1.1rem;right:-1.2rem;animation:float-a 4.5s ease-in-out infinite}
+.hi-float-b{bottom:-1.1rem;left:-1.2rem;animation:float-a 5s ease-in-out 1.3s infinite}
+
+@media(max-width:900px){
+  #hero{min-height:unset;padding-top:5rem;padding-bottom:2rem}
+  .hero-inner{grid-template-columns:1fr;gap:2.5rem;padding:1.5rem 0 0}
+  .hero-right{padding:.5rem 0 1rem;max-width:500px;margin:0 auto}
+  .hi-float{display:none}
+}
+@media(max-width:600px){
+  .hero-right{max-width:100%}
+  .hi-card{padding:1.15rem}
+  .hi-metrics{padding:.8rem .6rem;gap:.35rem}
+  .hi-mv{font-size:.92rem}
+  .hi-sources{gap:.35rem}
+}
 
 /* ─── LIGHT SECTIONS ───────────────────────────────── */
 .sec-light{background:#EEF3FF}
@@ -548,8 +613,10 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
   <div class="orb o-gold" style="width:600px;height:600px;top:-100px;left:-150px;opacity:.6"></div>
   <div class="orb o-blue" style="width:400px;height:400px;top:20%;right:-100px;opacity:.4" id="orb2"></div>
 
-  <div class="wrap" style="width:100%">
-    <div style="max-width:720px">
+  <div class="wrap hero-inner">
+
+    <!-- ── LEFT: headline + CTA ── -->
+    <div class="hero-left">
       <div class="badge hero-eyebrow float">
         <span class="pulse" style="width:7px;height:7px;border-radius:50%;background:var(--neon);display:block"></span>
         <span style="font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--neon)">Pre Lanzamiento Activo</span>
@@ -598,6 +665,105 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
         </div>
       </div>
     </div>
+
+    <!-- ── RIGHT: Investment card ── -->
+    <div class="hero-right reveal-r">
+      <div class="hi-ring-glow"></div>
+
+      <div class="hi-card">
+        <!-- header -->
+        <div class="hi-top">
+          <div class="hi-brand">
+            <img src="logoia.png" class="hi-logo" alt="SHTAI">
+            <div>
+              <div class="hi-tname">Smart Home Token AI</div>
+              <code class="hi-ticker">SHTAI · ERC-20 · Ethereum</code>
+            </div>
+          </div>
+          <div class="hi-live-badge">
+            <span class="pulse" style="width:6px;height:6px;background:var(--neon);border-radius:50%;display:block;flex-shrink:0"></span>
+            <span>PRE-VENTA</span>
+          </div>
+        </div>
+
+        <!-- pre-sale progress -->
+        <div class="hi-prog-wrap">
+          <div class="hi-prog-head">
+            <span>Captación activa — Fase 1</span>
+            <span class="hi-pct">62%</span>
+          </div>
+          <div class="hi-prog-bar"><div class="hi-prog-fill"></div></div>
+          <div class="hi-prog-foot">
+            <span>$742,000 recaudados</span>
+            <span>Meta: $1,200,000</span>
+          </div>
+        </div>
+
+        <!-- key metrics -->
+        <div class="hi-metrics">
+          <div class="hi-metric">
+            <span class="hi-ml">Precio Token</span>
+            <span class="hi-mv grad-gold">$0.085</span>
+            <span class="hi-ms">USD / SHTAI</span>
+          </div>
+          <div class="hi-div"></div>
+          <div class="hi-metric">
+            <span class="hi-ml">ROI Anual</span>
+            <span class="hi-mv grad-neon">12–15%</span>
+            <span class="hi-ms">proyectado</span>
+          </div>
+          <div class="hi-div"></div>
+          <div class="hi-metric">
+            <span class="hi-ml">Inversión mín.</span>
+            <span class="hi-mv" style="color:#EDF2FF">$1,000</span>
+            <span class="hi-ms">USD</span>
+          </div>
+        </div>
+
+        <!-- income sources -->
+        <div class="hi-sources">
+          <div class="hi-src">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4A84C" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Airbnb</span>
+          </div>
+          <div class="hi-src">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F5CC58" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            <span>Solar</span>
+          </div>
+          <div class="hi-src">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+            <span>BTC Mining</span>
+          </div>
+          <div class="hi-src">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00BAFF" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            <span>Dashboard IA</span>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <a href="https://wa.me/573023016241" target="_blank" class="btn btn-g" style="width:100%;justify-content:center;font-size:.88rem;margin-top:.2rem">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Participar en Preventa
+        </a>
+      </div>
+
+      <!-- floating accent cards -->
+      <div class="hi-float hi-float-a">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div>
+          <strong>Chapinero · Bogotá</strong>
+          <span>186 Apartamentos</span>
+        </div>
+      </div>
+      <div class="hi-float hi-float-b">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--neon)" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <div>
+          <strong>Contrato Auditado</strong>
+          <span>Ethereum · Verificado</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 

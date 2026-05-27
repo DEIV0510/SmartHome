@@ -436,20 +436,74 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
   #faq{padding-top:3.5rem!important;padding-bottom:3.5rem!important}
   #cta{padding:3.5rem 1.25rem!important}
 
-  /* nav logo size */
+  /* nav */
   .nav-logo img{height:52px}
 
   /* hero */
   #hero{padding-top:4rem}
   .hero-h1{font-size:clamp(1.9rem,9vw,3rem);letter-spacing:-.01em}
   .hero-sub{font-size:.92rem}
-  .hero-stats{gap:.6rem;margin-top:2rem}
   .stat-card{padding:.8rem .6rem}
   .stat-num{font-size:1.5rem}
 
-  /* benefits grid: 1 col */
-  .benefits-grid{grid-template-columns:1fr;gap:.85rem}
+  /* ── HORIZONTAL SWIPE ROWS ──────────────────────── */
+  .hero-stats,
+  .benefits-grid,
+  .steps-grid,
+  .gallery-grid{
+    display:flex!important;
+    overflow-x:auto;
+    overflow-y:visible;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    /* bleed to screen edges, add start padding */
+    margin-left:-1.25rem!important;
+    margin-right:-1.25rem!important;
+    padding-left:1.25rem!important;
+    padding-right:0!important;
+    padding-bottom:1rem!important;
+    grid-template-columns:unset!important;
+  }
+  .hero-stats::-webkit-scrollbar,
+  .benefits-grid::-webkit-scrollbar,
+  .steps-grid::-webkit-scrollbar,
+  .gallery-grid::-webkit-scrollbar{display:none}
+
+  /* end spacer so last card isn't flush to edge */
+  .hero-stats::after,
+  .benefits-grid::after,
+  .steps-grid::after,
+  .gallery-grid::after{content:'';flex-shrink:0;width:1.25rem;pointer-events:none}
+
+  /* individual gaps */
+  .hero-stats{gap:.65rem;margin-top:2rem!important}
+  .benefits-grid,.steps-grid,.gallery-grid{gap:.85rem}
+
+  /* ── card widths (peek = ~15–20% of next card) ── */
+  .hero-stats > *{
+    flex-shrink:0!important;scroll-snap-align:start;
+    width:calc(44vw - .5rem)!important;min-width:118px
+  }
+  .benefits-grid > *{
+    flex-shrink:0!important;scroll-snap-align:start;
+    width:83vw!important;min-width:260px
+  }
+  .steps-grid > *{
+    flex-shrink:0!important;scroll-snap-align:start;
+    width:78vw!important;min-width:230px
+  }
+  .gallery-grid > *{
+    flex-shrink:0!important;scroll-snap-align:start;
+    width:82vw!important
+  }
+  .gallery-grid .g-card img,
+  .gallery-grid .g-card:first-child img{height:210px!important}
+
+  /* individual card styles in swipe context */
   .b-card{padding:1.5rem}
+  .step{padding:1.5rem 1.25rem}
+  .step-n{font-size:2.2rem}
 
   /* project */
   .proj-feat{grid-template-columns:1fr 1fr;gap:.65rem}
@@ -460,11 +514,6 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
   .ring-wrap{width:200px;height:200px}
   .ring-center{inset:45px}
 
-  /* steps: 1 col on small mobile */
-  .steps-grid{grid-template-columns:1fr;gap:.85rem}
-  .step{padding:1.5rem 1.25rem}
-  .step-n{font-size:2.2rem}
-
   /* dashboard */
   .dash-phone{padding:1.25rem}
   .dash-total{font-size:1.6rem}
@@ -473,10 +522,6 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
   /* faq */
   .faq-q{padding:1rem 0;min-height:48px}
   .faq-item.open .faq-a{max-height:200px}
-
-  /* gallery */
-  .gallery-grid{gap:.75rem}
-  .g-card img,.g-card:first-child img{height:200px}
 
   /* footer */
   .footer-inner{flex-direction:column;align-items:flex-start;gap:1.25rem}
@@ -487,7 +532,7 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
   .cta-inner .btn{width:100%;justify-content:center;margin:.35rem 0}
   .cta-inner{padding:0 1rem}
 
-  /* hide cursor on touch */
+  /* cursors */
   #cur,#cur2{display:none}
 }
 
@@ -495,7 +540,9 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
 @media(max-width:375px){
   .hero-h1{font-size:1.75rem}
   .proj-feat{grid-template-columns:1fr}
-  .hero-stats{grid-template-columns:1fr 1fr}
+  .hero-stats > *{width:calc(47vw - .4rem)!important}
+  .benefits-grid > *{width:88vw!important}
+  .steps-grid > *{width:84vw!important}
   .dm{padding:.65rem .5rem}
 }
 

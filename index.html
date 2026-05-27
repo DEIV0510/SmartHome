@@ -3,1283 +3,953 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Home Token AI — Inversión Inmobiliaria del Futuro</title>
+<title>Smart Home Token AI</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/SplitText.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        navy: { 950:'#040811', 900:'#0A0E1A', 800:'#0D1B2A', 700:'#112236', 600:'#1A3A5C' },
-        gold: { 300:'#F0C060', 400:'#E8B040', 500:'#C9A84C', 600:'#A8862E' },
-        neon: { green:'#00FF88', blue:'#00D4FF', purple:'#8B5CF6' },
-      },
-      fontFamily: { space:['Space Grotesk','sans-serif'], inter:['Inter','sans-serif'] },
-    }
-  }
-}
-</script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+/* ─── TOKENS ───────────────────────────────────────── */
 :root{
-  --gold:#C9A84C;--gold-light:#F0C060;--neon:#00FF88;--neon-blue:#00D4FF;
-  --bg:#040811;--bg2:#0A0E1A;--bg3:#0D1B2A;--glass:rgba(255,255,255,0.04);
-  --glass-border:rgba(201,168,76,0.2);
+  --bg:#040811; --bg2:#0A0E1A; --bg3:#0D1B2A;
+  --gold:#C9A84C; --gold-l:#F0C060; --gold-d:#A8862E;
+  --neon:#00FF88; --blue:#00D4FF;
+  --glass:rgba(255,255,255,0.04); --gb:rgba(201,168,76,0.18);
+  --r:1.25rem;
 }
+
+/* ─── RESET ────────────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:#E8EDF5;font-family:'Space Grotesk',sans-serif;overflow-x:hidden}
+body{background:var(--bg);color:#E8EDF5;font-family:'Space Grotesk',sans-serif;overflow-x:hidden;cursor:none}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px}
 
-/* SCROLLBAR */
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:#040811}
-::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+/* ─── CURSOR ───────────────────────────────────────── */
+#cur{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .1s,width .3s,height .3s,opacity .3s}
+#cur2{position:fixed;width:36px;height:36px;border:1px solid rgba(201,168,76,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform .12s ease-out,width .3s,height .3s}
+body:hover #cur{opacity:1}
 
-/* GLASS */
-.glass{background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
-.glass-blue{background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.15);backdrop-filter:blur(16px)}
+/* ─── LOADER ───────────────────────────────────────── */
+#loader{position:fixed;inset:0;z-index:9000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+#loader-canvas{position:absolute;inset:0;pointer-events:none}
+.loader-logo{position:relative;z-index:2;opacity:0;transform:scale(.6)}
+.loader-logo img{width:120px;height:120px;object-fit:contain;filter:drop-shadow(0 0 40px rgba(201,168,76,.6))}
+.loader-brand{font-size:1rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-l);opacity:0;margin-top:1.2rem;position:relative;z-index:2}
+.loader-sub{font-size:.65rem;letter-spacing:.3em;color:rgba(255,255,255,.35);opacity:0;margin-top:.4rem;font-family:'Inter',sans-serif;position:relative;z-index:2}
+.loader-bar-wrap{width:260px;height:2px;background:rgba(255,255,255,.06);border-radius:1px;margin-top:2.5rem;position:relative;z-index:2;overflow:hidden}
+.loader-bar{height:100%;width:0;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--neon));border-radius:1px;box-shadow:0 0 12px var(--gold)}
+.loader-pct{font-size:.7rem;font-family:'Space Grotesk',sans-serif;font-weight:600;color:rgba(255,255,255,.4);margin-top:.8rem;letter-spacing:.1em;position:relative;z-index:2}
+.loader-lines{position:absolute;inset:0;z-index:1;opacity:.3}
+/* split panels for exit */
+.loader-panel{position:absolute;top:0;width:50%;height:100%;background:var(--bg);z-index:10}
+.loader-panel.left{left:0;transform-origin:left}
+.loader-panel.right{right:0;transform-origin:right}
 
-/* GLOW */
-.glow-gold{box-shadow:0 0 30px rgba(201,168,76,0.3),0 0 60px rgba(201,168,76,0.1)}
-.glow-neon{box-shadow:0 0 20px rgba(0,255,136,0.4),0 0 40px rgba(0,255,136,0.15)}
-.text-glow{text-shadow:0 0 30px rgba(201,168,76,0.5)}
-.text-glow-neon{text-shadow:0 0 20px rgba(0,255,136,0.6)}
+/* ─── GRID BG ──────────────────────────────────────── */
+.grid-bg{background-image:linear-gradient(rgba(201,168,76,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.025) 1px,transparent 1px);background-size:64px 64px}
 
-/* GRADIENT TEXT */
-.grad-gold{background:linear-gradient(135deg,#F0C060 0%,#C9A84C 50%,#E8B040 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.grad-blue{background:linear-gradient(135deg,#00D4FF 0%,#0080FF 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.grad-neon{background:linear-gradient(135deg,#00FF88 0%,#00D4FF 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+/* ─── NAV ──────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:1.25rem 2rem;transition:all .4s;display:flex;align-items:center;justify-content:space-between}
+nav.solid{background:rgba(4,8,17,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,.08)}
+.nav-logo{display:flex;align-items:center;gap:.75rem}
+.nav-logo img{height:36px;width:auto}
+.nav-logo span{font-size:.75rem;font-weight:700;letter-spacing:.12em;color:var(--gold-l)}
+.nav-links{display:flex;align-items:center;gap:2.5rem}
+.nav-links a{font-size:.8rem;color:rgba(232,237,245,.55);font-weight:500;text-decoration:none;transition:color .2s;letter-spacing:.04em}
+.nav-links a:hover{color:var(--gold-l)}
+.nav-cta{background:linear-gradient(135deg,var(--neon),#00C870);color:#040811;font-weight:700;font-size:.8rem;padding:.7rem 1.6rem;border-radius:50px;text-decoration:none;border:none;cursor:pointer;transition:all .3s;letter-spacing:.04em}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 0 24px rgba(0,255,136,.45)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:1.5px;background:var(--gold-l);transition:all .3s}
+#mob-menu{display:none;position:fixed;inset:0;z-index:490;background:rgba(4,8,17,.97);backdrop-filter:blur(20px);flex-direction:column;align-items:center;justify-content:center;gap:2rem}
+#mob-menu a{font-size:1.5rem;color:rgba(232,237,245,.7);text-decoration:none;font-weight:600;transition:color .2s}
+#mob-menu a:hover{color:var(--gold-l)}
+#mob-menu.open{display:flex}
 
-/* BUTTONS */
-.btn-primary{background:linear-gradient(135deg,#00FF88,#00D4AA);color:#040811;font-weight:700;font-family:'Space Grotesk',sans-serif;border-radius:50px;transition:all .3s ease;cursor:pointer;border:none;position:relative;overflow:hidden}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(0,255,136,0.5),0 0 60px rgba(0,255,136,0.2)}
-.btn-secondary{background:transparent;border:1.5px solid var(--gold);color:var(--gold-light);font-family:'Space Grotesk',sans-serif;font-weight:600;border-radius:50px;transition:all .3s ease;cursor:pointer}
-.btn-secondary:hover{background:rgba(201,168,76,0.1);box-shadow:0 0 20px rgba(201,168,76,0.3);transform:translateY(-2px)}
+/* ─── GLASS ────────────────────────────────────────── */
+.g{background:var(--glass);border:1px solid var(--gb);backdrop-filter:blur(16px);border-radius:var(--r)}
+.g-blue{background:rgba(0,212,255,.04);border:1px solid rgba(0,212,255,.14);backdrop-filter:blur(16px);border-radius:var(--r)}
 
-/* HERO PARTICLES */
-#particles-canvas{position:absolute;inset:0;pointer-events:none;z-index:0}
+/* ─── ORB ──────────────────────────────────────────── */
+.orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;will-change:transform}
+.o-gold{background:radial-gradient(circle,rgba(201,168,76,.18) 0%,transparent 70%)}
+.o-blue{background:radial-gradient(circle,rgba(0,212,255,.12) 0%,transparent 70%)}
+.o-neon{background:radial-gradient(circle,rgba(0,255,136,.09) 0%,transparent 70%)}
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:1000;transition:all .4s ease}
-nav.scrolled{background:rgba(4,8,17,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,168,76,0.1)}
-.nav-link{color:rgba(232,237,245,0.7);font-size:.875rem;font-weight:500;transition:color .2s;cursor:pointer}
-.nav-link:hover{color:var(--gold-light)}
+/* ─── UTILS ────────────────────────────────────────── */
+.grad-gold{background:linear-gradient(135deg,#F0C060,#C9A84C,#E8B040);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-neon{background:linear-gradient(135deg,#00FF88,#00D4FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.tag{font-size:.68rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);opacity:.8;font-family:'Inter',sans-serif}
+.badge{background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(201,168,76,.04));border:1px solid rgba(201,168,76,.28);border-radius:50px;display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1.1rem}
+.pulse{animation:pulse-a 2.2s ease-in-out infinite}
+@keyframes pulse-a{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.15)}}
+.float{animation:float-a 4s ease-in-out infinite}
+@keyframes float-a{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 
-/* SECTION */
-.section-tag{font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);opacity:.8}
+/* ─── BUTTONS ──────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:.6rem;border-radius:50px;font-family:'Space Grotesk',sans-serif;font-weight:700;cursor:pointer;transition:all .3s;border:none;text-decoration:none;position:relative;overflow:hidden}
+.btn-g{background:linear-gradient(135deg,var(--neon),#00C870);color:#040811;padding:.9rem 2.2rem;font-size:.9rem}
+.btn-g::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.2),transparent);opacity:0;transition:opacity .3s}
+.btn-g:hover::before{opacity:1}
+.btn-g:hover{transform:translateY(-3px);box-shadow:0 0 32px rgba(0,255,136,.45),0 8px 24px rgba(0,0,0,.3)}
+.btn-o{background:transparent;border:1.5px solid rgba(201,168,76,.5);color:var(--gold-l);padding:.85rem 2rem;font-size:.85rem}
+.btn-o:hover{background:rgba(201,168,76,.08);border-color:var(--gold);box-shadow:0 0 20px rgba(201,168,76,.25);transform:translateY(-2px)}
+.magnetic{transition:transform .25s cubic-bezier(.25,.46,.45,.94)}
 
-/* CARD */
-.benefit-card{transition:all .4s ease;position:relative;overflow:hidden}
-.benefit-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,0.05),transparent);opacity:0;transition:opacity .3s}
-.benefit-card:hover{transform:translateY(-6px);border-color:rgba(201,168,76,0.4)}
-.benefit-card:hover::before{opacity:1}
-.benefit-card:hover .card-icon{box-shadow:0 0 30px rgba(201,168,76,0.4)}
+/* ─── SECTION ──────────────────────────────────────── */
+section{position:relative;overflow:hidden}
+.wrap{max-width:1100px;margin:0 auto;padding:0 1.5rem}
 
-/* STAT COUNTER */
-.stat-num{font-size:clamp(2rem,4vw,3.5rem);font-weight:700;line-height:1}
+/* ─── HERO ─────────────────────────────────────────── */
+#hero{min-height:100svh;display:flex;align-items:center;padding-top:5rem}
+.hero-eyebrow{opacity:0}
+.hero-h1{font-size:clamp(2.4rem,6vw,5.2rem);font-weight:800;line-height:1.05;letter-spacing:-.02em}
+.hero-h1 .line{display:block;overflow:hidden}
+.hero-h1 .inner{display:block;transform:translateY(110%)}
+.hero-sub{color:rgba(232,237,245,.45);font-family:'Inter',sans-serif;font-size:1rem;line-height:1.7;max-width:480px;opacity:0}
+.hero-btns{opacity:0}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-top:3rem;opacity:0}
+.stat-card{padding:1.1rem 1rem;text-align:center}
+.stat-num{font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;display:block;line-height:1}
+.stat-lbl{font-size:.62rem;color:rgba(232,237,245,.4);letter-spacing:.15em;text-transform:uppercase;font-family:'Inter',sans-serif;margin-top:.35rem}
 
-/* ROADMAP */
-.roadmap-line{position:relative}
-.roadmap-line::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(201,168,76,0.4),transparent)}
+/* ─── BENEFITS ─────────────────────────────────────── */
+#benefits{padding:7rem 0}
+.benefits-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+.b-card{padding:2rem;position:relative;overflow:hidden;transition:border-color .3s,transform .4s}
+.b-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,.04),transparent);opacity:0;transition:opacity .3s}
+.b-card:hover{border-color:rgba(201,168,76,.4);transform:translateY(-4px)}
+.b-card:hover::after{opacity:1}
+.b-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:1.2rem;transition:box-shadow .3s}
+.b-card:hover .b-icon{box-shadow:0 0 24px rgba(201,168,76,.35)}
+.b-card h3{font-size:1.05rem;font-weight:700;margin-bottom:.5rem}
+.b-card p{font-size:.83rem;color:rgba(232,237,245,.5);line-height:1.65;font-family:'Inter',sans-serif}
 
-/* TOKEN CARD */
-.token-ring{border:2px solid var(--gold);border-radius:50%;animation:spin-slow 20s linear infinite}
-@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.token-ring-2{border:1px solid rgba(0,212,255,0.3);border-radius:50%;animation:spin-slow 15s linear infinite reverse}
+/* ─── PROJECT ──────────────────────────────────────── */
+#project{padding:7rem 0;background:linear-gradient(180deg,var(--bg) 0%,var(--bg3) 60%,var(--bg) 100%)}
+.project-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.proj-feat{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:1.5rem}
+.feat-card{padding:1.2rem;background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.1);border-radius:1rem;transition:all .3s}
+.feat-card:hover{border-color:rgba(201,168,76,.3);background:rgba(201,168,76,.04)}
+.feat-num{font-size:1.9rem;font-weight:800}
+.feat-lbl{font-size:.72rem;color:rgba(232,237,245,.45);font-family:'Inter',sans-serif;margin-top:.2rem;line-height:1.3}
 
-/* DASHBOARD */
-.dash-card{background:rgba(13,27,42,0.8);border:1px solid rgba(201,168,76,0.15);border-radius:16px;backdrop-filter:blur(10px)}
+/* ─── TOKEN / ROI ──────────────────────────────────── */
+#token{padding:7rem 0}
+.token-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:3rem;align-items:start}
+.t-stat{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.2rem;margin-bottom:.65rem}
+.t-stat:last-child{margin:0}
+.t-left{display:flex;align-items:center;gap:.85rem}
+.t-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.t-name{font-size:.85rem;font-weight:600}
+.t-desc{font-size:.72rem;color:rgba(232,237,245,.4);font-family:'Inter',sans-serif;margin-top:.15rem}
+.t-val{font-size:.9rem;font-weight:700;text-align:right}
 
-/* PULSE */
-.pulse-dot{animation:pulse-anim 2s ease-in-out infinite}
-@keyframes pulse-anim{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.1)}}
+/* ring animation */
+.ring-wrap{position:relative;width:240px;height:240px;flex-shrink:0;margin:0 auto}
+.ring{position:absolute;border-radius:50%;border-style:solid}
+.ring-1{inset:0;border-width:1.5px;border-color:rgba(201,168,76,.35);animation:spin1 18s linear infinite}
+.ring-2{inset:20px;border-width:1px;border-color:rgba(0,212,255,.2);animation:spin1 12s linear infinite reverse}
+.ring-3{inset:40px;border-width:.5px;border-color:rgba(255,255,255,.06)}
+@keyframes spin1{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.ring-center{position:absolute;inset:55px;border-radius:50%;background:rgba(13,27,42,.9);border:1px solid rgba(201,168,76,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(10px)}
+.ring-dot{position:absolute;width:7px;height:7px;border-radius:50%;top:6px;left:50%;transform:translateX(-50%)}
+.ring-dot2{position:absolute;width:5px;height:5px;border-radius:50%;bottom:14px;right:14px}
+.ring-dot3{position:absolute;width:5px;height:5px;border-radius:50%;top:30%;left:4px}
+/* chart */
+.chart-wrap{padding:1.5rem;position:relative}
+.chart-label{position:absolute;top:1.5rem;right:1.5rem;font-size:.7rem;font-family:'Inter',sans-serif;color:rgba(232,237,245,.4)}
 
-/* FLOAT */
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-.float-anim{animation:float 4s ease-in-out infinite}
+/* ─── STEPS ────────────────────────────────────────── */
+#steps{padding:7rem 0;background:linear-gradient(180deg,var(--bg) 0%,var(--bg3) 100%)}
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:3.5rem}
+.step{padding:1.8rem 1.4rem;text-align:center;position:relative;transition:all .4s}
+.step:hover{transform:translateY(-6px);border-color:rgba(201,168,76,.45)}
+.step-n{font-size:2.8rem;font-weight:800;line-height:1;margin-bottom:1rem;font-family:'Space Grotesk',sans-serif}
+.step h4{font-size:.95rem;font-weight:700;margin-bottom:.5rem}
+.step p{font-size:.78rem;color:rgba(232,237,245,.45);line-height:1.6;font-family:'Inter',sans-serif}
+.step-conn{display:none;position:absolute;top:50%;right:-1rem;width:2rem;height:1px;background:linear-gradient(90deg,rgba(201,168,76,.4),transparent)}
 
-/* GRADIENT ORBS */
-.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
-.orb-gold{background:radial-gradient(circle,rgba(201,168,76,0.15) 0%,transparent 70%)}
-.orb-blue{background:radial-gradient(circle,rgba(0,212,255,0.1) 0%,transparent 70%)}
-.orb-neon{background:radial-gradient(circle,rgba(0,255,136,0.08) 0%,transparent 70%)}
+/* ─── DASHBOARD ────────────────────────────────────── */
+#dashboard{padding:7rem 0}
+.dash-phone{background:rgba(10,14,26,.95);border:1px solid rgba(201,168,76,.15);border-radius:1.5rem;padding:1.5rem;max-width:420px;margin:0 auto;box-shadow:0 40px 80px rgba(0,0,0,.5),0 0 60px rgba(201,168,76,.06)}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.dash-title{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(232,237,245,.35);font-family:'Inter',sans-serif}
+.dash-total{font-size:2rem;font-weight:800;line-height:1}
+.dash-badge{display:flex;align-items:center;gap:.4rem;background:rgba(0,255,136,.1);border:1px solid rgba(0,255,136,.2);border-radius:50px;padding:.3rem .7rem}
+.dash-badge span:last-child{font-size:.65rem;color:var(--neon);font-weight:700;font-family:'Inter',sans-serif}
+.dash-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-top:1rem}
+.dm{background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.08);border-radius:.85rem;padding:.85rem;text-align:center}
+.dm-val{font-size:.95rem;font-weight:700}
+.dm-lbl{font-size:.58rem;color:rgba(232,237,245,.35);font-family:'Inter',sans-serif;margin-top:.2rem;letter-spacing:.06em}
+.dash-income{margin-top:1.2rem}
+.di-row{display:flex;align-items:center;justify-content:space-between;padding:.65rem .8rem;border-radius:.75rem;background:rgba(255,255,255,.02);border:1px solid rgba(201,168,76,.06);margin-bottom:.4rem;transition:all .3s}
+.di-row:hover{border-color:rgba(201,168,76,.2);background:rgba(201,168,76,.04)}
+.di-left{display:flex;align-items:center;gap:.6rem}
+.di-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.di-name{font-size:.75rem;font-weight:500}
+.di-val{font-size:.75rem;font-weight:700}
+.dash-cta{margin-top:1.2rem;width:100%;padding:.85rem;text-align:center;font-size:.82rem}
 
-/* GRID BG */
-.grid-bg{background-image:linear-gradient(rgba(201,168,76,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.03) 1px,transparent 1px);background-size:60px 60px}
+/* ─── FAQ ──────────────────────────────────────────── */
+#faq{padding:7rem 0}
+.faq-item{border-bottom:1px solid rgba(201,168,76,.1);overflow:hidden}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 0;background:transparent;border:none;text-align:left;cursor:pointer;gap:1rem}
+.faq-q span:first-child{font-size:.95rem;font-weight:600;color:#E8EDF5;transition:color .2s}
+.faq-q:hover span:first-child{color:var(--gold-l)}
+.faq-icon{width:22px;height:22px;border:1px solid rgba(201,168,76,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s}
+.faq-item.open .faq-icon{background:var(--gold);border-color:var(--gold);transform:rotate(45deg)}
+.faq-item.open .faq-icon svg{stroke:#040811}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.faq-a p{font-size:.85rem;color:rgba(232,237,245,.55);line-height:1.75;font-family:'Inter',sans-serif;padding-bottom:1.2rem}
+.faq-item.open .faq-a{max-height:120px}
 
-/* MOBILE NAV */
-#mobile-menu{transition:all .3s ease}
-.hamburger span{display:block;width:24px;height:2px;background:var(--gold-light);transition:all .3s;margin:5px 0}
+/* ─── CTA ──────────────────────────────────────────── */
+#cta{padding:8rem 0;text-align:center}
+.cta-inner{position:relative;max-width:700px;margin:0 auto}
+.cta-glow{position:absolute;top:50%;left:50%;width:500px;height:500px;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(201,168,76,.1) 0%,transparent 70%);pointer-events:none}
+.cta-h{font-size:clamp(2.2rem,5vw,4rem);font-weight:800;line-height:1.1;letter-spacing:-.02em}
+.cta-num{font-size:1.5rem;font-weight:700;color:var(--gold-l);letter-spacing:.04em;margin:.75rem 0 2rem}
+.cta-trust{display:flex;flex-wrap:wrap;justify-content:center;gap:1.5rem;margin-top:2.5rem}
+.trust-item{display:flex;align-items:center;gap:.45rem;font-size:.75rem;color:rgba(232,237,245,.35);font-family:'Inter',sans-serif}
 
-/* FAQ */
-.faq-answer{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .4s ease}
-.faq-item.open .faq-answer{max-height:200px;padding-bottom:1rem}
-.faq-item.open .faq-icon{transform:rotate(45deg)}
-.faq-icon{transition:transform .3s ease;color:var(--gold)}
+/* ─── FOOTER ───────────────────────────────────────── */
+footer{background:var(--bg3);border-top:1px solid rgba(201,168,76,.08);padding:2.5rem 0}
+.footer-inner{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem}
+.footer-brand{display:flex;align-items:center;gap:.75rem}
+.footer-brand img{height:36px}
+.footer-brand div{font-size:.75rem;color:rgba(232,237,245,.4);font-family:'Inter',sans-serif;line-height:1.5}
+.footer-disc{font-size:.65rem;color:rgba(232,237,245,.2);font-family:'Inter',sans-serif;max-width:360px;line-height:1.6}
 
-/* WHATSAPP FLOAT */
-.wa-float{position:fixed;bottom:2rem;right:2rem;z-index:999;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#25D366,#128C7E);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.5);cursor:pointer;transition:all .3s;animation:pulse-wa 3s ease-in-out infinite}
-@keyframes pulse-wa{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,0.5)}50%{box-shadow:0 4px 40px rgba(37,211,102,0.8),0 0 0 10px rgba(37,211,102,0.1)}}
-.wa-float:hover{transform:scale(1.1)}
+/* ─── WA FLOAT ─────────────────────────────────────── */
+.wa{position:fixed;bottom:2rem;right:2rem;z-index:800;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#25D366,#128C7E);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.45);cursor:pointer;text-decoration:none;transition:transform .3s;animation:wa-pulse 3s ease-in-out infinite}
+.wa:hover{transform:scale(1.12)}
+@keyframes wa-pulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.45)}50%{box-shadow:0 4px 40px rgba(37,211,102,.8),0 0 0 8px rgba(37,211,102,.1)}}
 
-/* BADGE */
-.badge{background:linear-gradient(135deg,rgba(201,168,76,0.15),rgba(201,168,76,0.05));border:1px solid rgba(201,168,76,0.3);border-radius:50px}
+/* ─── RESPONSIVE ───────────────────────────────────── */
+@media(max-width:900px){
+  .benefits-grid,.project-grid,.token-grid{grid-template-columns:1fr}
+  .steps-grid{grid-template-columns:1fr 1fr}
+  .hero-stats{grid-template-columns:1fr 1fr}
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  .ring-wrap{margin-bottom:2rem}
+}
+@media(max-width:500px){
+  .hero-stats,.steps-grid{grid-template-columns:1fr 1fr}
+  .proj-feat{grid-template-columns:1fr 1fr}
+}
 
-/* PROGRESS BAR */
-.progress-bar{height:4px;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light))}
+/* ─── REVEAL HELPERS ───────────────────────────────── */
+.reveal{opacity:0;transform:translateY(32px)}
+.reveal-l{opacity:0;transform:translateX(-40px)}
+.reveal-r{opacity:0;transform:translateX(40px)}
+.reveal-s{opacity:0;transform:scale(.92)}
 </style>
 </head>
 <body>
 
-<!-- WHATSAPP FLOAT -->
-<a href="https://wa.me/573023016241" target="_blank" class="wa-float" aria-label="Contactar por WhatsApp">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+<!-- CURSOR -->
+<div id="cur"></div>
+<div id="cur2"></div>
+
+<!-- WA FLOAT -->
+<a href="https://wa.me/573023016241" target="_blank" class="wa" aria-label="WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 
-<!-- NAV -->
-<nav id="navbar" aria-label="Navegación principal">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <img src="logoia.png" alt="Smart Home Token AI" class="h-10 w-auto">
-    </div>
-    <div class="hidden lg:flex items-center gap-8">
-      <a href="#proyecto" class="nav-link">Proyecto</a>
-      <a href="#inversion" class="nav-link">Inversión</a>
-      <a href="#token" class="nav-link">Token</a>
-      <a href="#beneficios" class="nav-link">Beneficios</a>
-      <a href="#roadmap" class="nav-link">Roadmap</a>
-      <a href="#contacto" class="nav-link">Contacto</a>
-    </div>
-    <div class="hidden lg:flex items-center gap-3">
-      <a href="https://wa.me/573023016241?text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Smart%20Home%20Token%20AI" target="_blank" rel="noopener" class="btn-primary px-6 py-2.5 text-sm">Hablar con asesor</a>
-      <a href="#contacto" class="btn-secondary px-5 py-2.5 text-sm">Solicitar deck</a>
-    </div>
-    <button class="hamburger lg:hidden p-2" id="menu-toggle" aria-label="Menú">
-      <span></span><span></span><span></span>
-    </button>
+<!-- ══════════ LOADER ══════════ -->
+<div id="loader">
+  <canvas id="loader-canvas"></canvas>
+  <div class="loader-panel left" id="lp-l"></div>
+  <div class="loader-panel right" id="lp-r"></div>
+
+  <div class="loader-logo" id="ll">
+    <img src="logoia.png" alt="SHTAI">
   </div>
-  <!-- MOBILE MENU -->
-  <div id="mobile-menu" class="lg:hidden hidden px-6 pb-6 pt-2">
-    <div class="glass rounded-2xl p-5 flex flex-col gap-4">
-      <a href="#proyecto" class="nav-link py-2 border-b border-white/5">Proyecto</a>
-      <a href="#inversion" class="nav-link py-2 border-b border-white/5">Inversión</a>
-      <a href="#token" class="nav-link py-2 border-b border-white/5">Token</a>
-      <a href="#beneficios" class="nav-link py-2 border-b border-white/5">Beneficios</a>
-      <a href="#roadmap" class="nav-link py-2 border-b border-white/5">Roadmap</a>
-      <a href="#contacto" class="nav-link py-2">Contacto</a>
-      <a href="https://wa.me/573023016241?text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Smart%20Home%20Token%20AI" target="_blank" rel="noopener" class="btn-primary px-6 py-3 text-center text-sm mt-2">Hablar con asesor por WhatsApp</a>
-    </div>
+  <div class="loader-brand" id="lb">SMART HOME TOKEN AI</div>
+  <div class="loader-sub" id="ls">INNOVATE · TOKENIZE · AUTOMATE · EARN</div>
+  <div class="loader-bar-wrap">
+    <div class="loader-bar" id="lbar"></div>
+  </div>
+  <div class="loader-pct" id="lpct">0%</div>
+</div>
+
+<!-- ══════════ NAV ══════════ -->
+<nav id="nav">
+  <div class="nav-logo">
+    <img src="logoia.png" alt="SHTAI logo">
+    <span>SHTAI</span>
+  </div>
+  <div class="nav-links">
+    <a href="#benefits">Beneficios</a>
+    <a href="#project">Proyecto</a>
+    <a href="#token">Token</a>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <a href="https://wa.me/573023016241" target="_blank" class="nav-cta">Invertir Ahora</a>
+  <div class="hamburger" id="ham">
+    <span></span><span></span><span></span>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg pt-20">
-  <canvas id="particles-canvas"></canvas>
-  <!-- ORBS -->
-  <div class="orb orb-gold w-96 h-96 -top-20 -left-20 opacity-60"></div>
-  <div class="orb orb-blue w-80 h-80 top-1/3 right-0 opacity-40"></div>
-  <div class="orb orb-neon w-64 h-64 bottom-10 left-1/3 opacity-30"></div>
+<!-- MOBILE MENU -->
+<div id="mob-menu">
+  <a href="#benefits" onclick="closeMob()">Beneficios</a>
+  <a href="#project" onclick="closeMob()">Proyecto</a>
+  <a href="#token" onclick="Token">Token</a>
+  <a href="#dashboard" onclick="closeMob()">Dashboard</a>
+  <a href="#faq" onclick="closeMob()">FAQ</a>
+  <a href="https://wa.me/573023016241" target="_blank" class="nav-cta" style="font-size:1rem;padding:1rem 2.5rem">Invertir Ahora</a>
+</div>
 
-  <div class="relative z-10 max-w-6xl mx-auto px-6 text-center">
-    <!-- BADGE -->
-    <div class="badge inline-flex items-center gap-2 px-5 py-2.5 mb-8 float-anim">
-      <span class="pulse-dot w-2 h-2 rounded-full bg-neon-green inline-block"></span>
-      <span class="text-xs font-semibold tracking-widest uppercase text-gold-300">Pre-lanzamiento activo</span>
-    </div>
+<!-- ══════════ HERO ══════════ -->
+<section id="hero" class="grid-bg">
+  <div class="orb o-gold" style="width:600px;height:600px;top:-100px;left:-150px;opacity:.6"></div>
+  <div class="orb o-blue" style="width:400px;height:400px;top:20%;right:-100px;opacity:.4" id="orb2"></div>
 
-    <h1 class="font-space font-bold leading-tight mb-6" style="font-size:clamp(2.2rem,6vw,5rem)">
-      <span class="block text-white">La nueva era de la</span>
-      <span class="block grad-gold text-glow">inversión inmobiliaria</span>
-      <span class="block text-white">empieza ahora.</span>
-    </h1>
-
-    <p class="text-lg md:text-xl text-blue-200/70 mb-4 font-inter font-light tracking-wide">
-      Real estate &nbsp;+&nbsp; inteligencia artificial &nbsp;+&nbsp; blockchain
-    </p>
-
-    <p class="text-base text-white/40 mb-10 font-inter">Proyecto respaldado por activos inmobiliarios reales en Bogotá, Colombia.</p>
-
-    <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-      <a href="https://wa.me/573023016241?text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Smart%20Home%20Token%20AI" target="_blank" rel="noopener"
-         class="btn-primary px-10 py-4 text-base flex items-center gap-3 glow-neon" aria-label="Solicitar información por WhatsApp">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Hablar con un asesor
-      </a>
-      <a href="#contacto" class="btn-secondary px-8 py-4 text-base">Solicitar el deck</a>
-    </div>
-
-    <!-- HERO STATS -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-      <div class="glass rounded-2xl p-5 text-center">
-        <div class="stat-num grad-gold">186</div>
-        <div class="text-xs text-white/50 mt-1 font-inter uppercase tracking-wider">Apartamentos</div>
+  <div class="wrap" style="width:100%">
+    <div style="max-width:720px">
+      <div class="badge hero-eyebrow float">
+        <span class="pulse" style="width:7px;height:7px;border-radius:50%;background:var(--neon);display:block"></span>
+        <span style="font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--neon)">Pre Lanzamiento Activo</span>
       </div>
-      <div class="glass rounded-2xl p-5 text-center">
-        <div class="stat-num grad-neon">12&ndash;15%</div>
-        <div class="text-xs text-white/50 mt-1 font-inter uppercase tracking-wider">ROI estimado anual</div>
-      </div>
-      <div class="glass rounded-2xl p-5 text-center">
-        <div class="stat-num grad-blue">18.6K</div>
-        <div class="text-xs text-white/50 mt-1 font-inter uppercase tracking-wider">Tokens</div>
-      </div>
-      <div class="glass rounded-2xl p-5 text-center">
-        <div class="stat-num" style="background:linear-gradient(135deg,#F0C060,#00D4FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent">$1K</div>
-        <div class="text-xs text-white/50 mt-1 font-inter uppercase tracking-wider">Desde USD</div>
-      </div>
-    </div>
-  </div>
 
-  <!-- SCROLL INDICATOR -->
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
-    <span class="text-xs tracking-widest uppercase font-inter text-white/40">Descubre más</span>
-    <div class="w-px h-10 bg-gradient-to-b from-gold-500 to-transparent"></div>
-  </div>
-</section>
+      <h1 class="hero-h1" style="margin-top:1.5rem">
+        <span class="line"><span class="inner text-white">LA NUEVA ERA DE LA</span></span>
+        <span class="line"><span class="inner grad-gold" style="-webkit-text-fill-color:transparent">INVERSIÓN</span></span>
+        <span class="line"><span class="inner text-white">INMOBILIARIA</span></span>
+        <span class="line" style="display:flex;align-items:center;gap:.6rem">
+          <span class="inner text-white">YA&nbsp;</span><span class="inner grad-neon" style="-webkit-text-fill-color:transparent">COMIENZA.</span>
+        </span>
+      </h1>
 
-<!-- BENEFITS -->
-<section id="beneficios" class="py-24 relative overflow-hidden">
-  <div class="orb orb-gold w-96 h-96 top-0 right-0 opacity-20"></div>
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <span class="section-tag">Por Qué Elegirnos</span>
-      <h2 class="text-4xl md:text-5xl font-bold mt-3 mb-4">
-        La Inversión <span class="grad-gold">Inteligente</span>
-      </h2>
-      <p class="text-white/50 max-w-xl mx-auto font-inter">Combinamos lo mejor del mundo inmobiliario con tecnología de vanguardia</p>
-    </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <!-- Card 1 -->
-      <div class="benefit-card glass rounded-2xl p-7">
-        <div class="card-icon w-14 h-14 rounded-xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center mb-5 transition-all">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <p class="hero-sub" style="margin-top:1.5rem">
+        Real Estate + Inteligencia Artificial + Blockchain.<br>
+        Bogotá, Colombia — Chapinero · 186 apartamentos premium.
+      </p>
+
+      <div class="hero-btns" style="display:flex;gap:1rem;margin-top:2rem;flex-wrap:wrap">
+        <a href="https://wa.me/573023016241" target="_blank" class="btn btn-g magnetic">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          ÚNETE AHORA
+        </a>
+        <button class="btn btn-o magnetic" onclick="document.getElementById('token').scrollIntoView({behavior:'smooth'})">
+          VER TOKENOMICS
+        </button>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-card g">
+          <span class="stat-num grad-gold" data-count="186">0</span>
+          <span class="stat-lbl">Apartamentos</span>
         </div>
-        <h3 class="font-bold text-lg mb-2 text-white">Real Estate Tokenizado</h3>
-        <p class="text-sm text-white/50 font-inter leading-relaxed">Inversión inmobiliaria fraccionada mediante blockchain. Sé propietario desde $1,000.</p>
-      </div>
-      <!-- Card 2 -->
-      <div class="benefit-card glass-blue rounded-2xl p-7">
-        <div class="card-icon w-14 h-14 rounded-xl bg-neon-blue/10 border border-neon-blue/20 flex items-center justify-center mb-5 transition-all">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/><circle cx="12" cy="10" r="3"/></svg>
+        <div class="stat-card g-blue">
+          <span class="stat-num grad-neon" data-count="15" data-suffix="%">0%</span>
+          <span class="stat-lbl">ROI Anual</span>
         </div>
-        <h3 class="font-bold text-lg mb-2 text-white">Inteligencia Artificial</h3>
-        <p class="text-sm text-white/50 font-inter leading-relaxed">Optimización de activos y rentabilidad mediante IA avanzada en tiempo real.</p>
-      </div>
-      <!-- Card 3 -->
-      <div class="benefit-card glass rounded-2xl p-7">
-        <div class="card-icon w-14 h-14 rounded-xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center mb-5 transition-all">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <div class="stat-card g">
+          <span class="stat-num" style="background:linear-gradient(135deg,#F0C060,#00D4FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent" data-count="18600" data-format="18.6K">18.6K</span>
+          <span class="stat-lbl">Tokens</span>
         </div>
-        <h3 class="font-bold text-lg mb-2 text-white">Blockchain Segura</h3>
-        <p class="text-sm text-white/50 font-inter leading-relaxed">Transacciones transparentes, verificables e inmutables. Token ERC-20.</p>
-      </div>
-      <!-- Card 4 -->
-      <div class="benefit-card glass-blue rounded-2xl p-7">
-        <div class="card-icon w-14 h-14 rounded-xl bg-neon-green/10 border border-neon-green/20 flex items-center justify-center mb-5 transition-all">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        <div class="stat-card g-blue">
+          <span class="stat-num grad-gold" data-prefix="$" data-count="1000" data-format="$1K">$1K</span>
+          <span class="stat-lbl">Desde USD</span>
         </div>
-        <h3 class="font-bold text-lg mb-2 text-white">Ingresos Recurrentes</h3>
-        <p class="text-sm text-white/50 font-inter leading-relaxed">Dividendos mensuales estimados respaldados por múltiples fuentes de ingreso activas.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRE-LAUNCH BANNER -->
-<section class="py-16 relative overflow-hidden">
-  <div class="absolute inset-0 bg-gradient-to-r from-navy-900 via-navy-800 to-navy-900"></div>
-  <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(201,168,76,0.05) 0%,transparent 50%,rgba(0,212,255,0.05) 100%)"></div>
-  <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
-    <div class="badge inline-flex items-center gap-2 px-4 py-2 mb-6">
-      <span class="pulse-dot w-2 h-2 rounded-full bg-neon-green inline-block"></span>
-      <span class="text-xs font-bold tracking-widest uppercase text-neon-green">Proyecto respaldado por activos reales</span>
+<!-- ══════════ BENEFITS ══════════ -->
+<section id="benefits">
+  <div class="wrap" style="padding:7rem 1.5rem">
+    <div style="max-width:520px;margin-bottom:3.5rem" class="reveal-l">
+      <span class="tag">Por Qué Elegirnos</span>
+      <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:800;margin-top:.6rem;line-height:1.1">La Inversión <span class="grad-gold">del Futuro</span></h2>
     </div>
-    <h2 class="text-3xl md:text-5xl font-bold mb-4">
-      Pre lanzamiento <span class="grad-gold">Smart Home Token AI</span>
-    </h2>
-    <p class="text-xl text-white/60 mb-8 font-inter">Los inversionistas fundadores acceden al precio inicial del token y a condiciones preferenciales.</p>
-    <a href="https://wa.me/573023016241" target="_blank" class="btn-primary inline-flex items-center gap-3 px-10 py-4 text-lg">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Escríbenos por WhatsApp
-    </a>
+    <div class="benefits-grid">
+      <div class="b-card g reveal">
+        <div class="b-icon" style="background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <h3>Real Estate Tokenizado</h3>
+        <p>Propiedad fraccionada real. Sé dueño de apartamentos premium en Bogotá desde US$1,000 mediante blockchain.</p>
+      </div>
+      <div class="b-card g-blue reveal">
+        <div class="b-icon" style="background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.18)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </div>
+        <h3>Inteligencia Artificial</h3>
+        <p>Algoritmos de IA optimizan ocupación, pricing dinámico y rentabilidad del portafolio en tiempo real.</p>
+      </div>
+      <div class="b-card g reveal">
+        <div class="b-icon" style="background:rgba(0,255,136,.07);border:1px solid rgba(0,255,136,.18)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <h3>Ingresos Pasivos Mensuales</h3>
+        <p>Dividendos distribuidos automáticamente vía smart contract. Múltiples fuentes: Airbnb, BTC mining, solar, rooftop.</p>
+      </div>
+      <div class="b-card g-blue reveal">
+        <div class="b-icon" style="background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </div>
+        <h3>Blockchain ERC-20 Auditada</h3>
+        <p>Token SHTAI con contrato auditado. Transparencia total, transacciones verificables e inmutables en Ethereum.</p>
+      </div>
+    </div>
   </div>
 </section>
 
-<!-- PROJECT INFO -->
-<section id="proyecto" class="py-24 relative overflow-hidden">
-  <div class="orb orb-blue w-96 h-96 -bottom-20 -left-20 opacity-25"></div>
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <span class="section-tag">El Proyecto</span>
-      <h2 class="text-4xl md:text-5xl font-bold mt-3">
-        <span class="grad-gold">Smart Home Tower 1</span>
-      </h2>
-      <p class="text-white/50 mt-3 font-inter">Bogotá, Colombia — Chapinero, cerca de La Salle University</p>
-    </div>
-
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
-      <!-- Building visual -->
-      <div class="relative">
-        <div class="glass rounded-3xl p-8 relative overflow-hidden glow-gold">
-          <!-- Building illustration -->
-          <div class="flex flex-col items-center">
-            <div class="relative">
-              <!-- Building SVG -->
-              <svg width="280" height="340" viewBox="0 0 280 340" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Ground -->
-                <ellipse cx="140" cy="320" rx="120" ry="8" fill="rgba(201,168,76,0.1)"/>
-                <!-- Building body -->
-                <rect x="60" y="60" width="160" height="260" rx="4" fill="rgba(13,27,42,0.9)" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
-                <!-- Building gradient overlay -->
-                <rect x="60" y="60" width="160" height="260" rx="4" fill="url(#buildGrad)"/>
-                <!-- Windows rows -->
-                <g fill="rgba(201,168,76,0.7)">
-                  <!-- Row 1 -->
-                  <rect x="78" y="80" width="22" height="16" rx="2"/><rect x="110" y="80" width="22" height="16" rx="2"/>
-                  <rect x="142" y="80" width="22" height="16" rx="2"/><rect x="174" y="80" width="22" height="16" rx="2"/>
-                  <!-- Row 2 -->
-                  <rect x="78" y="108" width="22" height="16" rx="2" opacity=".8"/><rect x="110" y="108" width="22" height="16" rx="2" opacity=".6"/>
-                  <rect x="142" y="108" width="22" height="16" rx="2" opacity=".9"/><rect x="174" y="108" width="22" height="16" rx="2" opacity=".7"/>
-                  <!-- Row 3 -->
-                  <rect x="78" y="136" width="22" height="16" rx="2" opacity=".5"/><rect x="110" y="136" width="22" height="16" rx="2" opacity=".9"/>
-                  <rect x="142" y="136" width="22" height="16" rx="2" opacity=".6"/><rect x="174" y="136" width="22" height="16" rx="2" opacity=".8"/>
-                  <!-- Row 4 -->
-                  <rect x="78" y="164" width="22" height="16" rx="2" opacity=".9"/><rect x="110" y="164" width="22" height="16" rx="2" opacity=".4"/>
-                  <rect x="142" y="164" width="22" height="16" rx="2" opacity=".7"/><rect x="174" y="164" width="22" height="16" rx="2" opacity=".9"/>
-                  <!-- Row 5 -->
-                  <rect x="78" y="192" width="22" height="16" rx="2" opacity=".6"/><rect x="110" y="192" width="22" height="16" rx="2" opacity=".9"/>
-                  <rect x="142" y="192" width="22" height="16" rx="2" opacity=".5"/><rect x="174" y="192" width="22" height="16" rx="2" opacity=".8"/>
-                </g>
-                <!-- Blue AI windows -->
-                <rect x="110" y="80" width="22" height="16" rx="2" fill="rgba(0,212,255,0.5)"/>
-                <rect x="78" y="164" width="22" height="16" rx="2" fill="rgba(0,255,136,0.4)"/>
-                <!-- Ground floor -->
-                <rect x="60" y="290" width="160" height="30" rx="0 0 4 4" fill="rgba(201,168,76,0.15)" stroke="rgba(201,168,76,0.3)" stroke-width="1"/>
-                <!-- Door -->
-                <rect x="118" y="298" width="44" height="22" rx="2" fill="rgba(0,212,255,0.2)" stroke="rgba(0,212,255,0.4)" stroke-width="1"/>
-                <!-- Rooftop -->
-                <rect x="60" y="50" width="160" height="14" rx="4 4 0 0" fill="rgba(201,168,76,0.2)" stroke="rgba(201,168,76,0.4)" stroke-width="1"/>
-                <!-- Antenna -->
-                <line x1="140" y1="10" x2="140" y2="50" stroke="rgba(0,212,255,0.6)" stroke-width="2"/>
-                <circle cx="140" cy="10" r="4" fill="#00D4FF"/>
-                <!-- Circuit lines -->
-                <path d="M220 140 L240 140 L240 180 L260 180" stroke="rgba(201,168,76,0.3)" stroke-width="1" stroke-dasharray="4 4"/>
-                <path d="M60 200 L40 200 L40 230 L20 230" stroke="rgba(0,212,255,0.2)" stroke-width="1" stroke-dasharray="4 4"/>
-                <circle cx="260" cy="180" r="3" fill="rgba(201,168,76,0.6)"/>
-                <circle cx="20" cy="230" r="3" fill="rgba(0,212,255,0.4)"/>
-                <defs>
-                  <linearGradient id="buildGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="rgba(0,212,255,0.05)"/>
-                    <stop offset="100%" stop-color="rgba(201,168,76,0.08)"/>
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-            <!-- Location badge -->
-            <div class="badge px-4 py-2 mt-4 flex items-center gap-2">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              <span class="text-xs text-gold-300 font-semibold">Chapinero, Bogotá • La Salle University</span>
-            </div>
+<!-- ══════════ PROJECT ══════════ -->
+<section id="project">
+  <div class="orb o-blue" style="width:500px;height:500px;bottom:-100px;left:-150px;opacity:.25"></div>
+  <div class="wrap" style="padding:7rem 1.5rem">
+    <div class="project-grid">
+      <!-- Left: building visual -->
+      <div class="reveal-l">
+        <div class="g" style="padding:2rem;border-radius:1.5rem;position:relative;overflow:hidden">
+          <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,.04),transparent)"></div>
+          <!-- SVG Building -->
+          <svg width="100%" viewBox="0 0 300 360" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:relative;z-index:1">
+            <defs>
+              <linearGradient id="bg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(0,212,255,0.06)"/><stop offset="100%" stop-color="rgba(201,168,76,0.1)"/></linearGradient>
+              <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <ellipse cx="150" cy="335" rx="130" ry="9" fill="rgba(201,168,76,0.08)"/>
+            <rect x="55" y="55" width="190" height="280" rx="4" fill="url(#bg1)" stroke="rgba(201,168,76,0.25)" stroke-width="1"/>
+            <!-- Windows -->
+            <g opacity=".8">
+              <rect x="72" y="74" width="26" height="18" rx="2" fill="rgba(201,168,76,0.65)"/>
+              <rect x="108" y="74" width="26" height="18" rx="2" fill="rgba(0,212,255,0.5)"/>
+              <rect x="144" y="74" width="26" height="18" rx="2" fill="rgba(201,168,76,0.65)"/>
+              <rect x="180" y="74" width="26" height="18" rx="2" fill="rgba(201,168,76,0.4)"/>
+              <rect x="72" y="104" width="26" height="18" rx="2" fill="rgba(201,168,76,0.4)"/>
+              <rect x="108" y="104" width="26" height="18" rx="2" fill="rgba(201,168,76,0.7)"/>
+              <rect x="144" y="104" width="26" height="18" rx="2" fill="rgba(0,255,136,0.4)"/>
+              <rect x="180" y="104" width="26" height="18" rx="2" fill="rgba(201,168,76,0.6)"/>
+              <rect x="72" y="134" width="26" height="18" rx="2" fill="rgba(201,168,76,0.5)"/>
+              <rect x="108" y="134" width="26" height="18" rx="2" fill="rgba(0,212,255,0.35)"/>
+              <rect x="144" y="134" width="26" height="18" rx="2" fill="rgba(201,168,76,0.7)"/>
+              <rect x="180" y="134" width="26" height="18" rx="2" fill="rgba(201,168,76,0.45)"/>
+              <rect x="72" y="164" width="26" height="18" rx="2" fill="rgba(0,255,136,0.35)"/>
+              <rect x="108" y="164" width="26" height="18" rx="2" fill="rgba(201,168,76,0.65)"/>
+              <rect x="144" y="164" width="26" height="18" rx="2" fill="rgba(201,168,76,0.4)"/>
+              <rect x="180" y="164" width="26" height="18" rx="2" fill="rgba(0,212,255,0.45)"/>
+              <rect x="72" y="194" width="26" height="18" rx="2" fill="rgba(201,168,76,0.6)"/>
+              <rect x="108" y="194" width="26" height="18" rx="2" fill="rgba(201,168,76,0.35)"/>
+              <rect x="144" y="194" width="26" height="18" rx="2" fill="rgba(0,212,255,0.4)"/>
+              <rect x="180" y="194" width="26" height="18" rx="2" fill="rgba(201,168,76,0.7)"/>
+            </g>
+            <!-- Ground floor -->
+            <rect x="55" y="300" width="190" height="35" fill="rgba(201,168,76,0.12)" stroke="rgba(201,168,76,0.2)" stroke-width="1"/>
+            <rect x="124" y="308" width="52" height="27" rx="2" fill="rgba(0,212,255,0.15)" stroke="rgba(0,212,255,0.3)" stroke-width="1"/>
+            <!-- Rooftop -->
+            <rect x="55" y="44" width="190" height="14" rx="3 3 0 0" fill="rgba(201,168,76,0.18)" stroke="rgba(201,168,76,0.35)" stroke-width="1"/>
+            <!-- Antenna + glow -->
+            <line x1="150" y1="8" x2="150" y2="44" stroke="rgba(0,212,255,0.5)" stroke-width="1.5" filter="url(#glow)"/>
+            <circle cx="150" cy="8" r="4" fill="#00D4FF" filter="url(#glow)"/>
+            <!-- Circuit lines -->
+            <path d="M245 130 L268 130 L268 170 L290 170" stroke="rgba(201,168,76,0.25)" stroke-width="1" stroke-dasharray="4 3"/>
+            <circle cx="290" cy="170" r="3" fill="rgba(201,168,76,0.5)"/>
+            <path d="M55 200 L32 200 L32 240 L10 240" stroke="rgba(0,212,255,0.2)" stroke-width="1" stroke-dasharray="4 3"/>
+            <circle cx="10" cy="240" r="3" fill="rgba(0,212,255,0.4)"/>
+          </svg>
+          <div style="text-align:center;margin-top:1rem">
+            <span class="badge" style="font-size:.7rem;color:var(--gold-l);font-weight:600;letter-spacing:.06em">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Chapinero · Bogotá · La Salle University
+            </span>
           </div>
         </div>
       </div>
 
-      <!-- Stats grid -->
-      <div class="space-y-5">
-        <h3 class="text-2xl font-bold text-white mb-6">Proyecto Inmobiliario<br><span class="grad-gold">de Alto Impacto</span></h3>
+      <!-- Right: stats -->
+      <div class="reveal-r">
+        <span class="tag">El Proyecto</span>
+        <h2 style="font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;margin:.6rem 0 1rem;line-height:1.1">Smart Home <span class="grad-gold">Tower 1</span></h2>
+        <p style="font-size:.88rem;color:rgba(232,237,245,.5);line-height:1.75;font-family:'Inter',sans-serif;margin-bottom:1.5rem">Proyecto inmobiliario de apartamentos premium con diseño moderno, energía solar, mining BTC y amenidades de lujo en una ubicación estratégica de Bogotá.</p>
 
-        <div class="grid grid-cols-2 gap-4">
-          <div class="glass rounded-2xl p-5">
-            <div class="text-4xl font-bold grad-gold mb-1">186</div>
-            <div class="text-sm text-white/50 font-inter">Apartamentos de Lujo</div>
+        <div class="proj-feat">
+          <div class="feat-card">
+            <div class="feat-num grad-gold" data-count="186">0</div>
+            <div class="feat-lbl">Apartamentos de lujo</div>
           </div>
-          <div class="glass-blue rounded-2xl p-5">
-            <div class="text-4xl font-bold grad-blue mb-1">30</div>
-            <div class="text-sm text-white/50 font-inter">Parqueaderos</div>
+          <div class="feat-card">
+            <div class="feat-num grad-blue" style="background:linear-gradient(135deg,#00D4FF,#0080FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent" data-count="30">0</div>
+            <div class="feat-lbl">Parqueaderos</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-num grad-neon" style="font-size:1.2rem">Airbnb</div>
+            <div class="feat-lbl">Alta demanda internacional</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-num grad-gold" style="font-size:1.2rem">Solar</div>
+            <div class="feat-lbl">Energía monetizada</div>
           </div>
         </div>
 
-        <div class="glass rounded-2xl p-5">
-          <div class="flex items-center gap-3 mb-3">
-            <div class="w-8 h-8 rounded-lg bg-neon-green/10 border border-neon-green/20 flex items-center justify-center">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-            </div>
-            <span class="font-semibold text-white">Renta vía Airbnb</span>
+        <div style="margin-top:1.5rem;padding:1.2rem;background:rgba(0,255,136,.04);border:1px solid rgba(0,255,136,.12);border-radius:1rem">
+          <div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.75rem">
+            <span class="pulse" style="width:7px;height:7px;border-radius:50%;background:var(--neon);display:block"></span>
+            <span style="font-size:.75rem;font-weight:700;color:var(--neon);letter-spacing:.08em">ROI PROYECTADO</span>
           </div>
-          <p class="text-sm text-white/50 font-inter">Alta demanda internacional y corta estadía. Maximización de ingresos por ocupación.</p>
+          <div style="font-size:2.2rem;font-weight:800" class="grad-neon">12% — 15%</div>
+          <div style="font-size:.78rem;color:rgba(232,237,245,.4);font-family:'Inter',sans-serif;margin-top:.25rem">Retorno anual estimado sobre inversión</div>
         </div>
 
-        <div class="glass rounded-2xl p-5">
-          <div class="flex items-center gap-3 mb-3">
-            <div class="w-8 h-8 rounded-lg bg-gold-500/10 border border-gold-500/20 flex items-center justify-center">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            </div>
-            <span class="font-semibold text-white">Diseño Moderno + Eficiente</span>
-          </div>
-          <p class="text-sm text-white/50 font-inter">Edificio nuevo con energía solar, tecnología smart y amenidades premium.</p>
-        </div>
-
-        <a href="https://wa.me/573023016241" target="_blank" class="btn-primary w-full py-4 text-center block font-semibold">
-          Recibe el Deck Completo
+        <a href="https://wa.me/573023016241" target="_blank" class="btn btn-g magnetic" style="margin-top:1.5rem;width:100%;justify-content:center">
+          RECIBIR DECK COMPLETO
         </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ROI / INVESTMENT -->
-<section id="inversion" class="py-24 relative overflow-hidden" style="background:linear-gradient(180deg,var(--bg) 0%,var(--bg3) 50%,var(--bg) 100%)">
-  <div class="orb orb-gold w-80 h-80 top-0 left-1/2 -translate-x-1/2 opacity-20"></div>
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <span class="section-tag">Rentabilidad</span>
-      <h2 class="text-4xl md:text-5xl font-bold mt-3">
-        ROI estimado <span class="grad-neon text-glow-neon">12% &ndash; 15%</span> anual
+<!-- ══════════ TOKEN + CHART ══════════ -->
+<section id="token" style="padding:7rem 0">
+  <div class="orb o-gold" style="width:500px;height:500px;top:50%;right:-150px;transform:translateY(-50%);opacity:.2"></div>
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:3.5rem" class="reveal">
+      <span class="tag">Tokenomics</span>
+      <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:800;margin-top:.6rem;line-height:1.1">
+        <span class="grad-gold">SMART HOME TOKEN</span> <span style="color:rgba(232,237,245,.4)">(SHTAI)</span>
       </h2>
-      <p class="text-white/50 mt-3 font-inter max-w-xl mx-auto">Cifra proyectada con base en el modelo financiero del proyecto. Sujeta a las condiciones del mercado.</p>
+      <p style="color:rgba(232,237,245,.4);font-family:'Inter',sans-serif;font-size:.9rem;margin-top:.6rem">Token ERC-20 · Ethereum · Auditado · Respaldado por activos reales</p>
     </div>
 
-    <!-- Chart + stats -->
-    <div class="grid lg:grid-cols-2 gap-10 items-center mb-16">
-      <div class="glass rounded-3xl p-7">
-        <div class="flex items-center justify-between mb-6">
-          <span class="text-sm font-semibold text-white/60 font-inter">Proyección de rendimiento</span>
-          <span class="badge px-3 py-1 text-xs font-bold text-gold-300">Modelo financiero</span>
+    <div class="token-grid">
+      <!-- Left: ring + stats -->
+      <div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:2rem">
+          <div class="ring-wrap reveal-s">
+            <div class="ring ring-1"></div>
+            <div class="ring ring-2"></div>
+            <div class="ring ring-3"></div>
+            <div class="ring-dot" style="background:var(--gold)"></div>
+            <div class="ring-dot2" style="background:var(--blue)"></div>
+            <div class="ring-dot3" style="background:var(--neon)"></div>
+            <div class="ring-center">
+              <img src="logoia.png" alt="SHTAI" style="width:56px;height:56px;object-fit:contain;margin-bottom:.4rem">
+              <span style="font-size:.6rem;font-weight:700;letter-spacing:.2em;color:var(--gold-l)">SHTAI</span>
+              <span style="font-size:.55rem;color:rgba(232,237,245,.35);font-family:'Inter',sans-serif">ERC-20</span>
+            </div>
+          </div>
+
+          <div style="width:100%" class="reveal">
+            <div class="t-stat g">
+              <div class="t-left">
+                <span class="t-dot" style="background:var(--gold)"></span>
+                <div><div class="t-name">Tokens Disponibles</div><div class="t-desc">Total supply</div></div>
+              </div>
+              <div class="t-val grad-gold">18,600</div>
+            </div>
+            <div class="t-stat g" style="margin-top:.65rem">
+              <div class="t-left">
+                <span class="t-dot" style="background:var(--blue)"></span>
+                <div><div class="t-name">Tokens por Apartamento</div><div class="t-desc">Propiedad fraccionada</div></div>
+              </div>
+              <div class="t-val" style="color:var(--blue)">100</div>
+            </div>
+            <div class="t-stat g" style="margin-top:.65rem">
+              <div class="t-left">
+                <span class="t-dot" style="background:var(--neon)"></span>
+                <div><div class="t-name">Precio por Token</div><div class="t-desc">USDT / Cripto / Transfer</div></div>
+              </div>
+              <div class="t-val" style="color:var(--neon)">US$1,000</div>
+            </div>
+          </div>
         </div>
-        <canvas id="roiChart" height="220" role="img" aria-label="Gráfica de proyección anual del rendimiento estimado del token"></canvas>
       </div>
 
-      <div class="space-y-4">
-        <div class="glass rounded-2xl p-5 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-            </div>
-            <div>
-              <div class="text-sm font-semibold text-white">Dividendos mensuales</div>
-              <div class="text-xs text-white/40 font-inter">Distribución automática vía smart contract</div>
+      <!-- Right: chart + payment methods -->
+      <div class="reveal-r">
+        <div class="g chart-wrap" style="border-radius:1.25rem;margin-bottom:1rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+            <span style="font-size:.78rem;font-weight:600;color:rgba(232,237,245,.6)">Proyección de Rendimiento</span>
+            <div class="badge" style="padding:.3rem .7rem">
+              <span class="pulse" style="width:5px;height:5px;border-radius:50%;background:var(--neon);display:block"></span>
+              <span style="font-size:.65rem;font-weight:700;color:var(--neon)">+24.57%</span>
             </div>
           </div>
-          <div class="w-2 h-2 rounded-full bg-neon-green pulse-dot"></div>
+          <canvas id="roiChart" height="180"></canvas>
         </div>
 
-        <div class="glass rounded-2xl p-5 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-neon-blue/10 border border-neon-blue/20 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-            </div>
-            <div>
-              <div class="text-sm font-semibold text-white">Minería BTC por Apartamento</div>
-              <div class="text-xs text-white/40 font-inter">Ingreso cripto adicional</div>
-            </div>
+        <div class="g" style="padding:1.2rem;border-radius:1.25rem">
+          <div style="font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(232,237,245,.4);margin-bottom:.85rem;font-family:'Inter',sans-serif">Métodos de Pago</div>
+          <div style="display:flex;flex-wrap:wrap;gap:.5rem">
+            <span style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:50px;padding:.35rem .85rem;font-size:.72rem;font-weight:600;color:var(--gold-l)">USDT</span>
+            <span style="background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.18);border-radius:50px;padding:.35rem .85rem;font-size:.72rem;font-weight:600;color:var(--blue)">Bitcoin</span>
+            <span style="background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:50px;padding:.35rem .85rem;font-size:.72rem;font-weight:600;color:var(--gold-l)">Ethereum</span>
+            <span style="background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.16);border-radius:50px;padding:.35rem .85rem;font-size:.72rem;font-weight:600;color:var(--neon)">Transferencia</span>
           </div>
-          <div class="w-2 h-2 rounded-full bg-neon-blue pulse-dot"></div>
-        </div>
-
-        <div class="glass rounded-2xl p-5 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-neon-green/10 border border-neon-green/20 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-            </div>
-            <div>
-              <div class="text-sm font-semibold text-white">Energía Solar Monetizada</div>
-              <div class="text-xs text-white/40 font-inter">Excedente vendido a la red</div>
-            </div>
-          </div>
-          <div class="w-2 h-2 rounded-full" style="background:#00FF88;animation:pulse-anim 2.5s infinite"></div>
-        </div>
-
-        <div class="glass rounded-2xl p-5 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-            </div>
-            <div>
-              <div class="text-sm font-semibold text-white">Apreciación del Activo</div>
-              <div class="text-xs text-white/40 font-inter">Valorización del inmueble</div>
-            </div>
-          </div>
-          <div class="w-2 h-2 rounded-full bg-gold-400 pulse-dot"></div>
         </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- Progress bars -->
-    <div class="glass rounded-3xl p-8">
-      <h3 class="text-lg font-bold text-white mb-6">Distribución de Ingresos Estimados</h3>
-      <div class="space-y-5">
+<!-- ══════════ STEPS ══════════ -->
+<section id="steps">
+  <div class="wrap" style="padding:7rem 1.5rem">
+    <div style="text-align:center;margin-bottom:3.5rem" class="reveal">
+      <span class="tag">Cómo Participar</span>
+      <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:800;margin-top:.6rem">4 Pasos para <span class="grad-neon">Invertir</span></h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step g reveal">
+        <div class="step-n grad-gold">01</div>
+        <h4>Contáctanos</h4>
+        <p>Escríbenos por WhatsApp al <strong style="color:var(--gold-l)">302 301 6241</strong></p>
+        <div class="step-conn"></div>
+      </div>
+      <div class="step g reveal">
+        <div class="step-n" style="background:linear-gradient(135deg,#00D4FF,#0080FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent">02</div>
+        <h4>Recibe el Deck</h4>
+        <p>Toda la información oficial, documentación y detalles del proyecto.</p>
+        <div class="step-conn"></div>
+      </div>
+      <div class="step g reveal">
+        <div class="step-n grad-neon">03</div>
+        <h4>Reserva Tokens</h4>
+        <p>Elige la cantidad, realiza tu inversión de forma segura y verificable.</p>
+        <div class="step-conn"></div>
+      </div>
+      <div class="step g reveal">
+        <div class="step-n grad-gold">04</div>
+        <h4>Recibe Dividendos</h4>
+        <p>Ingresos mensuales automáticos. Monitorea tu portafolio en tiempo real.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ DASHBOARD ══════════ -->
+<section id="dashboard" style="padding:7rem 0;background:linear-gradient(180deg,var(--bg3) 0%,var(--bg) 100%)">
+  <div class="orb o-neon" style="width:400px;height:400px;top:0;left:50%;transform:translateX(-50%);opacity:.25"></div>
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:3.5rem" class="reveal">
+      <span class="tag">Tu Panel de Control</span>
+      <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:800;margin-top:.6rem">Dashboard <span class="grad-blue" style="-webkit-text-fill-color:transparent;background:linear-gradient(135deg,#00D4FF,#0080FF);background-clip:text">Inteligente</span></h2>
+      <p style="color:rgba(232,237,245,.4);font-family:'Inter',sans-serif;font-size:.88rem;margin-top:.5rem">Monitorea tu inversión en tiempo real desde cualquier dispositivo</p>
+    </div>
+
+    <div class="dash-phone reveal-s float">
+      <div class="dash-header">
         <div>
-          <div class="flex justify-between text-sm mb-2"><span class="text-white/70 font-inter">Rentas Airbnb</span><span class="text-gold-300 font-semibold">45%</span></div>
-          <div class="w-full h-2 bg-white/5 rounded-full"><div class="progress-bar w-[45%]"></div></div>
+          <div class="dash-title">Portfolio Total</div>
+          <div class="dash-total">$186,<span style="color:rgba(232,237,245,.35)">500</span></div>
         </div>
         <div>
-          <div class="flex justify-between text-sm mb-2"><span class="text-white/70 font-inter">Apreciación Activo</span><span class="text-neon-blue font-semibold">25%</span></div>
-          <div class="w-full h-2 bg-white/5 rounded-full"><div class="h-full rounded-full bg-gradient-to-r from-neon-blue to-blue-400" style="width:25%"></div></div>
-        </div>
-        <div>
-          <div class="flex justify-between text-sm mb-2"><span class="text-white/70 font-inter">Minería BTC</span><span class="text-neon-green font-semibold">15%</span></div>
-          <div class="w-full h-2 bg-white/5 rounded-full"><div class="h-full rounded-full bg-gradient-to-r from-neon-green to-emerald-400" style="width:15%"></div></div>
-        </div>
-        <div>
-          <div class="flex justify-between text-sm mb-2"><span class="text-white/70 font-inter">Energía Solar + Rooftop</span><span class="text-gold-300 font-semibold">15%</span></div>
-          <div class="w-full h-2 bg-white/5 rounded-full"><div class="progress-bar" style="width:15%"></div></div>
+          <div class="dash-badge">
+            <span class="pulse" style="width:5px;height:5px;border-radius:50%;background:var(--neon);display:block"></span>
+            <span>+24.57% 30D</span>
+          </div>
         </div>
       </div>
+
+      <canvas id="dashChart" height="80" style="margin-bottom:1rem"></canvas>
+
+      <div class="dash-metrics">
+        <div class="dm">
+          <div class="dm-val grad-gold">$2,345</div>
+          <div class="dm-lbl">Dividendos/mes</div>
+        </div>
+        <div class="dm">
+          <div class="dm-val" style="color:var(--neon)">12–15%</div>
+          <div class="dm-lbl">ROI Proyect.</div>
+        </div>
+        <div class="dm">
+          <div class="dm-val" style="color:var(--blue)">92%</div>
+          <div class="dm-lbl">Ocupación</div>
+        </div>
+      </div>
+
+      <div class="dash-income" style="margin-top:1rem">
+        <div style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(232,237,245,.3);font-family:'Inter',sans-serif;margin-bottom:.6rem">Fuentes de Ingreso</div>
+        <div class="di-row">
+          <div class="di-left">
+            <span class="di-dot" style="background:var(--gold)"></span>
+            <span class="di-name">Rentas Airbnb</span>
+          </div>
+          <span class="di-val" style="color:var(--gold-l)">45%</span>
+        </div>
+        <div class="di-row">
+          <div class="di-left">
+            <span class="di-dot" style="background:var(--blue)"></span>
+            <span class="di-name">Apreciación Activo</span>
+          </div>
+          <span class="di-val" style="color:var(--blue)">25%</span>
+        </div>
+        <div class="di-row">
+          <div class="di-left">
+            <span class="di-dot" style="background:var(--neon)"></span>
+            <span class="di-name">Minería BTC + Solar</span>
+          </div>
+          <span class="di-val" style="color:var(--neon)">30%</span>
+        </div>
+      </div>
+
+      <a href="https://wa.me/573023016241" target="_blank" class="btn btn-g dash-cta magnetic">
+        QUIERO INVERTIR AHORA
+      </a>
     </div>
   </div>
 </section>
 
-<!-- WHY INVEST -->
-<section class="py-24 relative overflow-hidden">
-  <div class="orb orb-neon w-72 h-72 top-10 right-10 opacity-20"></div>
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <span class="section-tag">¿Por Qué Invertir?</span>
-      <h2 class="text-4xl md:text-5xl font-bold mt-3">
-        Baja Inversión, <span class="grad-gold">Alto Potencial</span>
+<!-- ══════════ FAQ ══════════ -->
+<section id="faq" style="padding:7rem 0">
+  <div class="wrap" style="max-width:700px">
+    <div style="text-align:center;margin-bottom:3rem" class="reveal">
+      <span class="tag">FAQ</span>
+      <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:800;margin-top:.6rem">Preguntas <span class="grad-gold">Frecuentes</span></h2>
+    </div>
+    <div id="faq-list" class="reveal"></div>
+  </div>
+</section>
+
+<!-- ══════════ CTA FINAL ══════════ -->
+<section id="cta" style="padding:8rem 0">
+  <div class="orb o-gold" style="width:600px;height:600px;top:50%;left:50%;transform:translate(-50%,-50%);opacity:.18"></div>
+  <div class="wrap">
+    <div class="cta-inner reveal">
+      <div class="badge" style="margin-bottom:1.5rem">
+        <span class="pulse" style="width:7px;height:7px;border-radius:50%;background:var(--neon);display:block"></span>
+        <span style="font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--neon)">Pre-Venta Activa — Cupos Limitados</span>
+      </div>
+      <h2 class="cta-h">
+        NO TE QUEDES<br><span class="grad-gold">POR FUERA</span>
       </h2>
-    </div>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Benefit items -->
-      <div class="glass rounded-2xl p-6 benefit-card">
-        <div class="flex gap-4">
-          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-neon-green/10 border border-neon-green/30 flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-white mb-1">Activos Inmobiliarios Reales</h4>
-            <p class="text-sm text-white/50 font-inter">Respaldados por propiedades físicas generadoras de ingreso.</p>
-          </div>
-        </div>
-      </div>
-      <div class="glass rounded-2xl p-6 benefit-card">
-        <div class="flex gap-4">
-          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-neon-green/10 border border-neon-green/30 flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-white mb-1">Propiedad Fraccionada</h4>
-            <p class="text-sm text-white/50 font-inter">Accede a bienes raíces premium desde $1,000 USD.</p>
-          </div>
-        </div>
-      </div>
-      <div class="glass rounded-2xl p-6 benefit-card">
-        <div class="flex gap-4">
-          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-neon-green/10 border border-neon-green/30 flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-white mb-1">IA que Maximiza Rentabilidad</h4>
-            <p class="text-sm text-white/50 font-inter">Algoritmos de IA optimizan ocupación y retorno en tiempo real.</p>
-          </div>
-        </div>
-      </div>
-      <div class="glass rounded-2xl p-6 benefit-card">
-        <div class="flex gap-4">
-          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-neon-green/10 border border-neon-green/30 flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-white mb-1">Dividendos mensuales estimados</h4>
-            <p class="text-sm text-white/50 font-inter">Distribución automática de las ganancias cada mes vía smart contract.</p>
-          </div>
-        </div>
-      </div>
-      <div class="glass rounded-2xl p-6 benefit-card">
-        <div class="flex gap-4">
-          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-neon-green/10 border border-neon-green/30 flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-white mb-1">Transparencia Total</h4>
-            <p class="text-sm text-white/50 font-inter">Blockchain garantiza trazabilidad y transparencia en tiempo real.</p>
-          </div>
-        </div>
-      </div>
-      <div class="glass rounded-2xl p-6 benefit-card">
-        <div class="flex gap-4">
-          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-neon-green/10 border border-neon-green/30 flex items-center justify-center">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <div>
-            <h4 class="font-semibold text-white mb-1">Early Adopter Benefits</h4>
-            <p class="text-sm text-white/50 font-inter">Los primeros inversionistas obtienen mayores beneficios y prioridad.</p>
-          </div>
-        </div>
+      <p style="color:rgba(232,237,245,.5);font-family:'Inter',sans-serif;margin-top:1rem;font-size:.95rem">Los primeros inversionistas obtienen mejores beneficios.</p>
+      <div class="cta-num">302 301 6241</div>
+      <a href="https://wa.me/573023016241" target="_blank" class="btn btn-g magnetic" style="font-size:1rem;padding:1.1rem 3rem">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        ESCRÍBENOS AHORA
+      </a>
+      <div class="cta-trust">
+        <div class="trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Activos Reales</div>
+        <div class="trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Token ERC-20</div>
+        <div class="trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Dividendos Mensuales</div>
+        <div class="trust-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Blockchain Auditada</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TOKENOMICS -->
-<section id="token" class="py-24 relative overflow-hidden" style="background:linear-gradient(180deg,var(--bg) 0%,var(--bg3) 100%)">
-  <div class="orb orb-gold w-96 h-96 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-15"></div>
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <span class="section-tag">Tokenomics</span>
-      <h2 class="text-4xl md:text-5xl font-bold mt-3">
-        <span class="grad-gold">SMART HOME TOKEN</span>
-        <span class="text-white"> (SHTAI)</span>
-      </h2>
-      <p class="text-white/50 mt-3 font-inter">Token ERC-20 respaldado por activos inmobiliarios reales</p>
-    </div>
-
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
-      <!-- Token visual -->
-      <div class="flex justify-center">
-        <div class="relative w-72 h-72 flex items-center justify-center">
-          <!-- Rings -->
-          <div class="token-ring absolute w-full h-full"></div>
-          <div class="token-ring-2 absolute" style="width:84%;height:84%"></div>
-          <div class="absolute" style="width:68%;height:68%;border:1px solid rgba(201,168,76,0.1);border-radius:50%"></div>
-          <!-- Center -->
-          <div class="glass rounded-full w-48 h-48 flex flex-col items-center justify-center glow-gold relative z-10">
-            <img src="logoia.png" alt="SHTAI" class="w-20 h-20 object-contain mb-2">
-            <div class="text-xs font-bold tracking-widest text-gold-300 uppercase">SHTAI</div>
-            <div class="text-xs text-white/40 font-inter mt-1">ERC-20</div>
-          </div>
-          <!-- Orbiting dots -->
-          <div class="absolute w-3 h-3 rounded-full bg-gold-300" style="top:8%;left:50%;transform:translateX(-50%)"></div>
-          <div class="absolute w-2 h-2 rounded-full bg-neon-blue" style="bottom:12%;right:10%"></div>
-          <div class="absolute w-2 h-2 rounded-full bg-neon-green" style="top:30%;left:5%"></div>
-        </div>
-      </div>
-
-      <!-- Token stats -->
-      <div class="space-y-4">
-        <div class="grid grid-cols-2 gap-4">
-          <div class="glass rounded-2xl p-5 text-center">
-            <div class="text-3xl font-bold grad-gold mb-1">18,600</div>
-            <div class="text-xs text-white/50 font-inter uppercase tracking-wider">Tokens Disponibles</div>
-          </div>
-          <div class="glass rounded-2xl p-5 text-center">
-            <div class="text-3xl font-bold grad-blue mb-1">100</div>
-            <div class="text-xs text-white/50 font-inter uppercase tracking-wider">Tokens / Apartamento</div>
-          </div>
-        </div>
-
-        <div class="glass rounded-2xl p-5 text-center">
-          <div class="text-3xl font-bold text-neon-green mb-1">US$1,000</div>
-          <div class="text-xs text-white/50 font-inter uppercase tracking-wider">Precio por Token</div>
-        </div>
-
-        <div class="glass rounded-2xl p-5">
-          <h4 class="font-semibold text-white mb-3 text-sm">Métodos de Pago Aceptados</h4>
-          <div class="flex flex-wrap gap-2">
-            <span class="badge px-3 py-1.5 text-xs text-gold-300 font-semibold">USDT</span>
-            <span class="badge px-3 py-1.5 text-xs text-gold-300 font-semibold">Bitcoin</span>
-            <span class="badge px-3 py-1.5 text-xs text-gold-300 font-semibold">Ethereum</span>
-            <span class="badge px-3 py-1.5 text-xs text-gold-300 font-semibold">Transferencia</span>
-            <span class="badge px-3 py-1.5 text-xs text-gold-300 font-semibold">Cripto</span>
-          </div>
-        </div>
-
-        <!-- Token supply progress -->
-        <div class="glass rounded-2xl p-5">
-          <div class="flex justify-between text-sm mb-3">
-            <span class="text-white/70 font-inter">Tokens Reservados</span>
-            <span class="text-gold-300 font-semibold">Pre-Venta Activa</span>
-          </div>
-          <div class="w-full h-3 bg-white/5 rounded-full overflow-hidden">
-            <div class="h-full rounded-full progress-bar" style="width:23%;transition:width 2s ease"></div>
-          </div>
-          <div class="flex justify-between text-xs text-white/30 font-inter mt-2">
-            <span>0</span><span>18,600 SHTAI</span>
-          </div>
-        </div>
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <img src="logoia.png" alt="SHTAI">
+      <div>
+        <div style="font-weight:700;color:#E8EDF5;font-size:.85rem">Smart Home Token AI</div>
+        <div>Innovate · Tokenize · Automate · Earn</div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- HOW TO PARTICIPATE -->
-<section class="py-24 relative overflow-hidden">
-  <div class="orb orb-blue w-72 h-72 bottom-0 right-0 opacity-20"></div>
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <span class="section-tag">Cómo Participar</span>
-      <h2 class="text-4xl md:text-5xl font-bold mt-3">
-        4 Pasos para <span class="grad-neon">Invertir</span>
-      </h2>
+    <div style="text-align:center">
+      <div style="font-size:.8rem;color:rgba(232,237,245,.5);font-family:'Inter',sans-serif">Bogotá, Colombia</div>
+      <a href="https://wa.me/573023016241" target="_blank" style="color:var(--gold-l);font-weight:700;text-decoration:none;font-size:.9rem">302 301 6241</a>
     </div>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="relative">
-        <div class="glass rounded-2xl p-6 benefit-card h-full">
-          <div class="w-12 h-12 rounded-xl bg-neon-green/10 border border-neon-green/30 flex items-center justify-center mb-4">
-            <span class="text-xl font-bold text-neon-green font-space">01</span>
-          </div>
-          <h4 class="font-bold text-white mb-2">Contáctanos</h4>
-          <p class="text-sm text-white/50 font-inter">Escríbenos por WhatsApp al +57 302 301 6241</p>
-        </div>
-        <div class="hidden lg:block absolute top-1/2 -right-3 w-6 h-px bg-gold-500/40"></div>
-      </div>
-      <div class="relative">
-        <div class="glass rounded-2xl p-6 benefit-card h-full">
-          <div class="w-12 h-12 rounded-xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center mb-4">
-            <span class="text-xl font-bold text-gold-300 font-space">02</span>
-          </div>
-          <h4 class="font-bold text-white mb-2">Recibe el Deck</h4>
-          <p class="text-sm text-white/50 font-inter">Te enviamos toda la información y documentación oficial</p>
-        </div>
-        <div class="hidden lg:block absolute top-1/2 -right-3 w-6 h-px bg-gold-500/40"></div>
-      </div>
-      <div class="relative">
-        <div class="glass rounded-2xl p-6 benefit-card h-full">
-          <div class="w-12 h-12 rounded-xl bg-neon-blue/10 border border-neon-blue/30 flex items-center justify-center mb-4">
-            <span class="text-xl font-bold text-neon-blue font-space">03</span>
-          </div>
-          <h4 class="font-bold text-white mb-2">Reserva tus Tokens</h4>
-          <p class="text-sm text-white/50 font-inter">Elige la cantidad y realiza tu inversión de forma segura</p>
-        </div>
-        <div class="hidden lg:block absolute top-1/2 -right-3 w-6 h-px bg-gold-500/40"></div>
-      </div>
-      <div class="glass rounded-2xl p-6 benefit-card h-full">
-        <div class="w-12 h-12 rounded-xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center mb-4">
-          <span class="text-xl font-bold text-gold-300 font-space">04</span>
-        </div>
-        <h4 class="font-bold text-white mb-2">Comienza a recibir dividendos</h4>
-        <p class="text-sm text-white/50 font-inter">Monitorea tu inversión y recibe pagos mensuales automatizados</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- INCOME SOURCES -->
-<section class="py-24 relative overflow-hidden" style="background:linear-gradient(180deg,var(--bg) 0%,var(--bg3) 100%)">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <span class="section-tag">Fuentes de Ingreso</span>
-      <h2 class="text-4xl md:text-5xl font-bold mt-3">
-        Múltiples Flujos de <span class="grad-gold">Rentabilidad</span>
-      </h2>
-    </div>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-      <div class="glass rounded-2xl p-5 benefit-card text-center">
-        <div class="w-12 h-12 rounded-xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center mx-auto mb-3">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-        </div>
-        <p class="text-sm font-semibold text-white">Rentas Apartamentos</p>
-      </div>
-      <div class="glass rounded-2xl p-5 benefit-card text-center">
-        <div class="w-12 h-12 rounded-xl bg-neon-blue/10 border border-neon-blue/20 flex items-center justify-center mx-auto mb-3">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-        </div>
-        <p class="text-sm font-semibold text-white">Airbnb & Short Stay</p>
-      </div>
-      <div class="glass rounded-2xl p-5 benefit-card text-center">
-        <div class="w-12 h-12 rounded-xl bg-neon-green/10 border border-neon-green/20 flex items-center justify-center mx-auto mb-3">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="1.5"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-        </div>
-        <p class="text-sm font-semibold text-white">Energía Solar</p>
-      </div>
-      <div class="glass rounded-2xl p-5 benefit-card text-center">
-        <div class="w-12 h-12 rounded-xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center mx-auto mb-3">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-        </div>
-        <p class="text-sm font-semibold text-white">Minería BTC</p>
-      </div>
-      <div class="glass rounded-2xl p-5 benefit-card text-center">
-        <div class="w-12 h-12 rounded-xl bg-neon-blue/10 border border-neon-blue/20 flex items-center justify-center mx-auto mb-3">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-        </div>
-        <p class="text-sm font-semibold text-white">Rooftop Restaurante</p>
-      </div>
-      <div class="glass rounded-2xl p-5 benefit-card text-center">
-        <div class="w-12 h-12 rounded-xl bg-neon-green/10 border border-neon-green/20 flex items-center justify-center mx-auto mb-3">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00FF88" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        </div>
-        <p class="text-sm font-semibold text-white">Rooftop Night Club</p>
-      </div>
-      <div class="glass rounded-2xl p-5 benefit-card text-center col-span-2 md:col-span-1">
-        <div class="w-12 h-12 rounded-xl bg-gold-500/10 border border-gold-500/20 flex items-center justify-center mx-auto mb-3">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-        </div>
-        <p class="text-sm font-semibold text-white">Apreciación Activo</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- DASHBOARD MOCKUP -->
-<section class="py-24 relative overflow-hidden">
-  <div class="orb orb-gold w-80 h-80 top-0 left-0 opacity-20"></div>
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <span class="section-tag">Tu Panel de Control</span>
-      <h2 class="text-4xl md:text-5xl font-bold mt-3">
-        Dashboard <span class="grad-blue">inteligente</span>
-      </h2>
-      <p class="text-white/50 mt-3 font-inter">Sigue tu inversión en tiempo real desde el dispositivo que quieras. (Visualización de referencia)</p>
-    </div>
-
-    <!-- Phone mockup wrapper -->
-    <div class="glass rounded-3xl p-6 md:p-10 max-w-2xl mx-auto glow-gold">
-      <!-- App top bar -->
-      <div class="flex items-center justify-between mb-6">
-        <div>
-          <div class="text-xs text-white/40 font-inter">Portfolio Total</div>
-          <div class="text-3xl font-bold text-white font-space">$186,500<span class="text-base text-white/40">.00</span></div>
-        </div>
-        <div class="badge px-3 py-1.5 flex items-center gap-1.5" title="Rendimiento estimado a 30 días según el modelo financiero">
-          <span class="w-1.5 h-1.5 rounded-full bg-neon-green pulse-dot" aria-hidden="true"></span>
-          <span class="text-xs font-bold text-neon-green">+24.57%</span>
-          <span class="text-xs text-white/40">30D · estimado</span>
-        </div>
-      </div>
-
-      <!-- Mini chart -->
-      <canvas id="dashChart" height="100" class="mb-6"></canvas>
-
-      <!-- Stats row -->
-      <div class="grid grid-cols-3 gap-4 mb-6">
-        <div class="dash-card p-4 text-center">
-          <div class="text-sm font-bold text-gold-300 font-space">$2,345</div>
-          <div class="text-xs text-white/40 font-inter mt-1">Dividendos/mes</div>
-        </div>
-        <div class="dash-card p-4 text-center">
-          <div class="text-sm font-bold text-neon-green font-space">12–15%</div>
-          <div class="text-xs text-white/40 font-inter mt-1">ROI Proyectado</div>
-        </div>
-        <div class="dash-card p-4 text-center">
-          <div class="text-sm font-bold text-neon-blue font-space">92%</div>
-          <div class="text-xs text-white/40 font-inter mt-1">Ocupación</div>
-        </div>
-      </div>
-
-      <!-- Holdings -->
-      <div class="space-y-3">
-        <div class="text-xs text-white/40 font-inter uppercase tracking-wider mb-3">Mis Tokens</div>
-        <div class="dash-card p-4 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <img src="logoia.png" alt="SHTAI" class="w-8 h-8 object-contain">
-            <div>
-              <div class="text-sm font-semibold text-white">SHTAI</div>
-              <div class="text-xs text-white/40 font-inter">Smart Home Token AI</div>
-            </div>
-          </div>
-          <div class="text-right">
-            <div class="text-sm font-bold text-white">100 tokens</div>
-            <div class="text-xs text-neon-green font-inter">+$2,345.75</div>
-          </div>
-        </div>
-        <div class="dash-card p-4 flex items-center justify-between">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-full bg-gold-500/20 border border-gold-500/30 flex items-center justify-center">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-            </div>
-            <div>
-              <div class="text-sm font-semibold text-white">Apto #047</div>
-              <div class="text-xs text-white/40 font-inter">Tower 1 — Chapinero</div>
-            </div>
-          </div>
-          <div class="text-right">
-            <div class="text-sm font-bold text-white">$186,500</div>
-            <div class="text-xs text-neon-green font-inter">Activo</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ROADMAP -->
-<section id="roadmap" class="py-24 relative overflow-hidden" style="background:linear-gradient(180deg,var(--bg) 0%,var(--bg3) 100%)">
-  <div class="max-w-4xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <span class="section-tag">Roadmap</span>
-      <h2 class="text-4xl md:text-5xl font-bold mt-3">
-        El Camino al <span class="grad-gold">Futuro</span>
-      </h2>
-    </div>
-    <div class="relative">
-      <!-- Vertical line -->
-      <div class="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-gold-500/30 to-transparent hidden md:block"></div>
-      <div class="space-y-8">
-        <!-- Phase 1 -->
-        <div class="md:grid md:grid-cols-2 md:gap-8 items-center">
-          <div class="md:text-right mb-4 md:mb-0">
-            <div class="glass rounded-2xl p-5 inline-block md:block benefit-card">
-              <div class="badge inline-flex px-3 py-1 mb-2 text-xs font-bold text-neon-green">ACTIVO</div>
-              <h4 class="font-bold text-white mb-1">Fase 1 — Pre Lanzamiento</h4>
-              <p class="text-sm text-white/50 font-inter">Captación de inversores fundadores. Venta de tokens a precio inicial.</p>
-            </div>
-          </div>
-          <div class="hidden md:flex justify-start items-center">
-            <div class="w-4 h-4 rounded-full bg-neon-green border-2 border-bg glow-neon ml-[-8px]"></div>
-          </div>
-        </div>
-        <!-- Phase 2 -->
-        <div class="md:grid md:grid-cols-2 md:gap-8 items-center">
-          <div class="hidden md:flex justify-end items-center">
-            <div class="w-4 h-4 rounded-full bg-gold-400 border-2 border-bg mr-[-8px]" style="box-shadow:0 0 15px rgba(201,168,76,0.5)"></div>
-          </div>
-          <div class="mb-4 md:mb-0">
-            <div class="glass rounded-2xl p-5 benefit-card">
-              <div class="badge inline-flex px-3 py-1 mb-2 text-xs font-bold text-gold-300">Q3 2025</div>
-              <h4 class="font-bold text-white mb-1">Fase 2 — Desarrollo</h4>
-              <p class="text-sm text-white/50 font-inter">Inicio de construcción, smart contracts auditados, app lanzada.</p>
-            </div>
-          </div>
-        </div>
-        <!-- Phase 3 -->
-        <div class="md:grid md:grid-cols-2 md:gap-8 items-center">
-          <div class="md:text-right mb-4 md:mb-0">
-            <div class="glass rounded-2xl p-5 inline-block md:block benefit-card">
-              <div class="badge inline-flex px-3 py-1 mb-2 text-xs font-bold text-neon-blue">Q1 2026</div>
-              <h4 class="font-bold text-white mb-1">Fase 3 — Operaciones</h4>
-              <p class="text-sm text-white/50 font-inter">Entrega edificio, activación rentas, primer pago de dividendos.</p>
-            </div>
-          </div>
-          <div class="hidden md:flex justify-start items-center">
-            <div class="w-4 h-4 rounded-full bg-neon-blue border-2 border-bg ml-[-8px]" style="box-shadow:0 0 15px rgba(0,212,255,0.4)"></div>
-          </div>
-        </div>
-        <!-- Phase 4 -->
-        <div class="md:grid md:grid-cols-2 md:gap-8 items-center">
-          <div class="hidden md:flex justify-end items-center">
-            <div class="w-4 h-4 rounded-full border-2 border-gold-500/40 bg-navy-900 mr-[-8px]"></div>
-          </div>
-          <div>
-            <div class="glass rounded-2xl p-5 benefit-card opacity-60">
-              <div class="badge inline-flex px-3 py-1 mb-2 text-xs font-bold text-white/40">2026+</div>
-              <h4 class="font-bold text-white mb-1">Fase 4 — Expansión</h4>
-              <p class="text-sm text-white/50 font-inter">Tower 2, nuevas ciudades, exchange secundario de tokens.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="py-24 relative overflow-hidden">
-  <div class="orb orb-neon w-64 h-64 top-10 left-0 opacity-15"></div>
-  <div class="max-w-3xl mx-auto px-6">
-    <div class="text-center mb-16">
-      <span class="section-tag">FAQ</span>
-      <h2 class="text-4xl md:text-5xl font-bold mt-3">
-        Preguntas <span class="grad-gold">Frecuentes</span>
-      </h2>
-    </div>
-    <div class="space-y-3" id="faq-container">
-      <!-- FAQ items injected by JS -->
-    </div>
-  </div>
-</section>
-
-<!-- CTA FINAL -->
-<section id="contacto" class="py-28 relative overflow-hidden">
-  <div class="absolute inset-0" style="background:radial-gradient(ellipse at center,rgba(201,168,76,0.08) 0%,transparent 70%)"></div>
-  <div class="relative z-10 max-w-3xl mx-auto px-6 text-center">
-    <div class="badge inline-flex items-center gap-2 px-5 py-2.5 mb-8">
-      <span class="pulse-dot w-2 h-2 rounded-full bg-neon-green inline-block"></span>
-      <span class="text-xs font-bold tracking-widest uppercase text-neon-green">Pre-venta activa · cupos limitados</span>
-    </div>
-
-    <h2 class="font-bold leading-tight mb-6 text-glow" style="font-size:clamp(2rem,5vw,4rem)">
-      <span class="text-white">Asegura tu</span><br>
-      <span class="grad-gold">lugar como fundador</span>
-    </h2>
-
-    <p class="text-lg text-white/60 mb-3 font-inter">Los inversionistas fundadores acceden al precio inicial y a condiciones preferenciales.</p>
-    <p class="text-2xl font-bold text-white mb-10 font-space">+57 302 301 6241</p>
-
-    <a href="https://wa.me/573023016241?text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20Smart%20Home%20Token%20AI" target="_blank" rel="noopener"
-       class="btn-primary inline-flex items-center gap-3 px-12 py-5 text-lg mb-6 glow-neon" aria-label="Hablar con un asesor por WhatsApp">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      Hablar con un asesor
-    </a>
-
-    <div class="flex flex-wrap justify-center gap-6 text-sm text-white/30 font-inter mt-10">
-      <span class="flex items-center gap-1.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Activos Reales</span>
-      <span class="flex items-center gap-1.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Token ERC-20</span>
-      <span class="flex items-center gap-1.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Dividendos Mensuales</span>
-      <span class="flex items-center gap-1.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Transparencia Blockchain</span>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer style="background:var(--bg3);border-top:1px solid rgba(201,168,76,0.1)" class="py-12">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-      <div class="flex items-center gap-3">
-        <img src="logoia.png" alt="Smart Home Token AI" class="h-10 w-auto">
-        <div>
-          <div class="font-bold text-white font-space">Smart Home Token AI</div>
-          <div class="text-xs text-white/40 font-inter">Innovate. Tokenize. Automate. Earn.</div>
-        </div>
-      </div>
-      <div class="text-center">
-        <div class="text-sm text-white/50 font-inter">Bogotá, Colombia</div>
-        <a href="https://wa.me/573023016241" target="_blank" rel="noopener" class="text-gold-300 font-semibold hover:text-gold-100 transition-colors">+57 302 301 6241</a>
-      </div>
-      <div class="text-xs text-white/40 font-inter text-center max-w-xs leading-relaxed">
-        © 2026 Smart Home Token AI · Bogotá, Colombia.<br>
-        Toda inversión conlleva riesgos. Los rendimientos proyectados se basan en el modelo financiero del proyecto y no constituyen asesoramiento financiero ni promesa de retorno.
-      </div>
-    </div>
+    <div class="footer-disc">© 2025 Smart Home Token AI. Este documento no constituye asesoramiento financiero. Toda inversión conlleva riesgos.</div>
   </div>
 </footer>
 
+<!-- ══════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════ -->
 <script>
-// ── GSAP Animations ──────────────────────────────────────────────────────────
 gsap.registerPlugin(ScrollTrigger);
 
-// Nav scroll effect
-window.addEventListener('scroll', () => {
-  const nav = document.getElementById('navbar');
-  if (window.scrollY > 50) nav.classList.add('scrolled');
-  else nav.classList.remove('scrolled');
+/* ── CURSOR ──────────────────────────────── */
+const cur = document.getElementById('cur');
+const cur2 = document.getElementById('cur2');
+let mx=0,my=0,cx=0,cy=0;
+window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; gsap.to(cur,{x:mx,y:my,duration:.08}); });
+(function animCur(){requestAnimationFrame(animCur);cx+=(mx-cx)*.12;cy+=(my-cy)*.12;cur2.style.transform=`translate(${cx-18}px,${cy-18}px)`;})();
+document.querySelectorAll('a,button,.btn,.b-card,.step,.faq-q,.di-row,.feat-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ gsap.to(cur,{width:20,height:20,duration:.2}); gsap.to(cur2,{width:56,height:56,duration:.25,borderColor:'rgba(201,168,76,.7)'}); });
+  el.addEventListener('mouseleave',()=>{ gsap.to(cur,{width:10,height:10,duration:.2}); gsap.to(cur2,{width:36,height:36,duration:.25,borderColor:'rgba(201,168,76,.4)'}); });
 });
 
-// Mobile menu
-document.getElementById('menu-toggle').addEventListener('click', function() {
-  const menu = document.getElementById('mobile-menu');
-  menu.classList.toggle('hidden');
-});
-document.querySelectorAll('#mobile-menu a').forEach(a => {
-  a.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
-});
-
-// Hero entrance
-gsap.from('.badge', { opacity:0, y:20, duration:.8, delay:.2, ease:'power2.out' });
-gsap.from('h1 span', { opacity:0, y:30, duration:.8, stagger:.15, delay:.4, ease:'power2.out' });
-gsap.from('.btn-primary, .btn-secondary', { opacity:0, y:20, duration:.6, stagger:.1, delay:.9, ease:'power2.out' });
-
-// Scroll animations
-gsap.utils.toArray('.benefit-card').forEach((card, i) => {
-  gsap.from(card, {
-    scrollTrigger: { trigger: card, start: 'top 85%', toggleActions: 'play none none none' },
-    opacity:0, y:40, duration:.7, delay: i % 4 * .1, ease:'power2.out'
+/* ── MAGNETIC BUTTONS ────────────────────── */
+document.querySelectorAll('.magnetic').forEach(el => {
+  el.addEventListener('mousemove', e => {
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left - r.width/2) * .25;
+    const y = (e.clientY - r.top - r.height/2) * .25;
+    gsap.to(el,{x,y,duration:.4,ease:'power2.out'});
   });
+  el.addEventListener('mouseleave',()=>gsap.to(el,{x:0,y:0,duration:.5,ease:'elastic.out(1,.4)'}));
 });
 
-gsap.utils.toArray('.glass').forEach(el => {
-  gsap.from(el, {
-    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
-    opacity:0, y:20, duration:.6, ease:'power2.out'
-  });
-});
+/* ── LOADER ──────────────────────────────── */
+(function(){
+  // loader particles
+  const c = document.getElementById('loader-canvas');
+  const ct = c.getContext('2d');
+  c.width = window.innerWidth; c.height = window.innerHeight;
+  const pts = Array.from({length:55},()=>({
+    x:Math.random()*c.width, y:Math.random()*c.height,
+    r:Math.random()*1.2+.3, dx:(Math.random()-.5)*.35, dy:(Math.random()-.5)*.35,
+    a:Math.random()*.4+.1, col:Math.random()>.5?'201,168,76':'0,212,255'
+  }));
+  let lraf;
+  function lDraw(){
+    ct.clearRect(0,0,c.width,c.height);
+    pts.forEach(p=>{
+      ct.beginPath();ct.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ct.fillStyle=`rgba(${p.col},${p.a})`;ct.fill();
+      p.x+=p.dx;p.y+=p.dy;
+      if(p.x<0||p.x>c.width)p.dx*=-1;if(p.y<0||p.y>c.height)p.dy*=-1;
+    });
+    // lines
+    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+      const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
+      if(d<90){ct.beginPath();ct.moveTo(pts[i].x,pts[i].y);ct.lineTo(pts[j].x,pts[j].y);
+        ct.strokeStyle=`rgba(201,168,76,${(1-d/90)*.06})`;ct.lineWidth=.5;ct.stroke();}
+    }
+    lraf=requestAnimationFrame(lDraw);
+  }
+  lDraw();
 
-// Section headings
-gsap.utils.toArray('h2').forEach(h2 => {
-  gsap.from(h2, {
-    scrollTrigger: { trigger: h2, start: 'top 85%' },
-    opacity:0, y:30, duration:.7, ease:'power2.out'
-  });
-});
-
-// Progress bars animation
-gsap.utils.toArray('.progress-bar').forEach(bar => {
-  const w = bar.style.width;
-  bar.style.width = '0';
-  gsap.to(bar, {
-    scrollTrigger: { trigger: bar, start: 'top 85%' },
-    width: w, duration:1.5, ease:'power2.out'
-  });
-});
-
-// Counter animation
-function animateCounters() {
-  document.querySelectorAll('.stat-num').forEach(el => {
-    const text = el.textContent.trim();
-    const num = parseFloat(text.replace(/[^0-9.]/g,''));
-    if (!num || isNaN(num)) return;
-    const prefix = text.match(/^[^0-9]*/)?.[0] || '';
-    const suffix = text.match(/[^0-9.]+$/)?.[0] || '';
-    let start = 0;
-    const dur = 2000;
-    const step = 16;
-    const inc = num / (dur / step);
-    const timer = setInterval(() => {
-      start = Math.min(start + inc, num);
-      el.textContent = prefix + (num < 100 ? start.toFixed(num < 1 ? 2 : 1) : Math.floor(start)) + suffix;
-      if (start >= num) clearInterval(timer);
-    }, step);
-  });
-}
-ScrollTrigger.create({
-  trigger: '#beneficios',
-  start: 'top 80%',
-  onEnter: animateCounters,
-  once: true
-});
-
-// ── PARTICLES ──────────────────────────────────────────────────────────────
-const canvas = document.getElementById('particles-canvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
-
-function resize() {
-  canvas.width = canvas.offsetWidth;
-  canvas.height = canvas.offsetHeight;
-}
-window.addEventListener('resize', resize);
-resize();
-
-for (let i = 0; i < 60; i++) {
-  particles.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    r: Math.random() * 1.5 + 0.3,
-    dx: (Math.random() - .5) * .3,
-    dy: (Math.random() - .5) * .3,
-    alpha: Math.random() * .5 + .1,
-    color: Math.random() > .6 ? '#C9A84C' : Math.random() > .5 ? '#00D4FF' : '#ffffff'
-  });
-}
-
-let animActive = true;
-const heroObs = new IntersectionObserver(e => { animActive = e[0].isIntersecting; }, { threshold: 0 });
-heroObs.observe(canvas.closest('section'));
-
-function drawParticles() {
-  if (!animActive) { requestAnimationFrame(drawParticles); return; }
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  particles.forEach(p => {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = p.color;
-    ctx.globalAlpha = p.alpha;
-    ctx.fill();
-    p.x += p.dx; p.y += p.dy;
-    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
-    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
-  });
-  ctx.globalAlpha = 1;
-
-  // Lines between close particles
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const d = Math.hypot(particles[i].x - particles[j].x, particles[i].y - particles[j].y);
-      if (d < 100) {
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = '#C9A84C';
-        ctx.globalAlpha = (1 - d/100) * .08;
-        ctx.lineWidth = .5;
-        ctx.stroke();
-        ctx.globalAlpha = 1;
+  // GSAP loader sequence
+  const tl = gsap.timeline();
+  tl
+    .to('#ll',{opacity:1,scale:1,duration:.9,ease:'back.out(1.5)',delay:.3})
+    .to('#lb',{opacity:1,y:0,duration:.6,ease:'power3.out'},'-=.3')
+    .to('#ls',{opacity:1,duration:.5,ease:'power2.out'},'-=.2')
+    .to('.loader-bar',{
+      width:'100%', duration:1.8, ease:'power2.inOut',
+      onUpdate: function(){
+        const p = Math.round(this.progress()*100);
+        document.getElementById('lpct').textContent = p+'%';
       }
-    }
-  }
-  requestAnimationFrame(drawParticles);
-}
-drawParticles();
+    },'-=.3')
+    .add(()=>{cancelAnimationFrame(lraf);}) // stop particle loop
+    // EXIT: dramatic panel split
+    .to('#ll',{scale:1.15,opacity:0,duration:.35,ease:'power3.in'},'-=.1')
+    .to('#lb,#ls,.loader-bar-wrap,#lpct',{opacity:0,y:-20,duration:.3,stagger:.04,ease:'power2.in'},'-=.35')
+    .to(['#lp-l','#lp-r'],{scaleX:1,duration:0}) // make panels visible
+    .to('#lp-l',{x:'-101%',duration:.55,ease:'power3.inOut'})
+    .to('#lp-r',{x:'101%',duration:.55,ease:'power3.inOut'},'-=.55')
+    .to('#loader',{opacity:0,duration:.3,ease:'power2.in',onComplete:()=>{
+      document.getElementById('loader').style.display='none';
+      document.body.style.overflow='auto';
+      heroEntrance();
+    }},'-=.15');
 
-// ── CHARTS ──────────────────────────────────────────────────────────────────
-const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-const roiData = [100,107,112,109,115,121,118,126,130,135,140,148];
+  document.body.style.overflow='hidden';
+})();
 
-new Chart(document.getElementById('roiChart'), {
-  type:'line',
-  data:{
-    labels: months,
-    datasets:[{
-      label:'ROI %',
-      data: roiData,
-      borderColor:'#C9A84C',
-      backgroundColor:'rgba(201,168,76,0.07)',
-      borderWidth:2,
-      pointRadius:3,
-      pointBackgroundColor:'#C9A84C',
-      fill:true,
-      tension:.4
-    },{
-      label:'Dividendos',
-      data:[80,88,92,96,100,105,108,115,120,125,130,135],
-      borderColor:'#00FF88',
-      backgroundColor:'rgba(0,255,136,0.05)',
-      borderWidth:1.5,
-      pointRadius:2,
-      pointBackgroundColor:'#00FF88',
-      fill:true,
-      tension:.4
-    }]
-  },
-  options:{
-    responsive:true,
-    plugins:{
-      legend:{ labels:{ color:'rgba(255,255,255,0.5)', font:{size:10}, boxWidth:12 } }
-    },
-    scales:{
-      x:{ grid:{ color:'rgba(255,255,255,0.03)' }, ticks:{ color:'rgba(255,255,255,0.4)', font:{size:10} } },
-      y:{ grid:{ color:'rgba(255,255,255,0.03)' }, ticks:{ color:'rgba(255,255,255,0.4)', font:{size:10} } }
-    }
-  }
-});
+/* ── HERO ENTRANCE ───────────────────────── */
+function heroEntrance(){
+  const tl = gsap.timeline();
+  tl
+    .to('.hero-eyebrow',{opacity:1,y:0,duration:.7,ease:'power3.out'})
+    .to('.hero-h1 .inner',{y:'0%',duration:1,stagger:.12,ease:'power4.out'},'-=.4')
+    .to('.hero-sub',{opacity:1,y:0,duration:.7,ease:'power2.out'},'-=.5')
+    .to('.hero-btns',{opacity:1,y:0,duration:.6,ease:'power2.out'},'-=.4')
+    .to('.hero-stats',{opacity:1,y:0,duration:.7,ease:'power2.out'},'-=.3');
 
-new Chart(document.getElementById('dashChart'), {
-  type:'line',
-  data:{
-    labels:['','','','','','','','','','','','','','','','','','','',''],
-    datasets:[{
-      data:[100,102,101,105,108,106,112,115,118,116,122,125,128,130,127,133,138,140,143,149],
-      borderColor:'#00D4FF',
-      backgroundColor:'rgba(0,212,255,0.05)',
-      borderWidth:1.5,
-      pointRadius:0,
-      fill:true,
-      tension:.4
-    }]
-  },
-  options:{
-    responsive:true,
-    plugins:{ legend:{display:false} },
-    scales:{
-      x:{ display:false },
-      y:{ display:false }
-    }
-  }
-});
-
-// ── FAQ ──────────────────────────────────────────────────────────────────────
-const faqs = [
-  { q:'¿Qué es Smart Home Token AI?', a:'Plataforma de inversión inmobiliaria tokenizada respaldada por activos reales en Bogotá, Colombia. Permite acceder al sector inmobiliario premium con tickets mucho menores a una compra tradicional.' },
-  { q:'¿Cómo funciona la tokenización?', a:'Cada propiedad se divide en tokens digitales ERC-20 respaldados por blockchain. Cada apartamento equivale a 100 tokens, lo que permite participación fraccionada.' },
-  { q:'¿Cuál es el ticket mínimo de inversión?', a:'Desde USD$1,000 por token. Puedes adquirir varios tokens para incrementar tu participación y tus dividendos estimados.' },
-  { q:'¿Cómo recibo mis ganancias?', a:'Mediante dividendos mensuales estimados, distribuidos automáticamente vía smart contract directamente a tu wallet de criptomonedas.' },
-  { q:'¿Qué blockchain utilizan?', a:'Token estándar ERC-20 sobre Ethereum. El smart contract es auditado y verificable públicamente en la red.' },
-  { q:'¿Los activos son reales?', a:'Sí. El proyecto está respaldado por Smart Home Tower 1, un edificio de 186 apartamentos en Chapinero, Bogotá, cerca de La Salle University.' },
-  { q:'¿Qué riesgos tiene la inversión?', a:'Como toda inversión, existen riesgos: variación del mercado inmobiliario, fluctuación cripto, demoras en construcción y regulación. La rentabilidad proyectada es estimada y no constituye una promesa de retorno.' },
-  { q:'¿Cuál es el horizonte de inversión?', a:'El proyecto está pensado a mediano y largo plazo. Los dividendos comienzan en la Fase 3 (operaciones), y existe la posibilidad de vender los tokens en un mercado secundario a partir de la Fase 4.' },
-  { q:'¿Cómo participo?', a:'Escríbenos por WhatsApp al +57 302 301 6241 y nuestro equipo te enviará el deck oficial junto con el proceso para reservar tus tokens.' },
-];
-
-const fc = document.getElementById('faq-container');
-faqs.forEach((f, i) => {
-  const div = document.createElement('div');
-  div.className = 'faq-item glass rounded-2xl overflow-hidden';
-  div.innerHTML = `
-    <button class="w-full p-5 flex items-center justify-between text-left gap-4" onclick="toggleFaq(${i})" aria-expanded="false" aria-controls="faq-answer-${i}">
-      <span class="font-semibold text-white text-sm md:text-base">${f.q}</span>
-      <svg class="faq-icon flex-shrink-0 w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    </button>
-    <div class="faq-answer px-5" id="faq-answer-${i}"><p class="text-sm text-white/60 font-inter pb-5 leading-relaxed">${f.a}</p></div>
-  `;
-  fc.appendChild(div);
-});
-
-function toggleFaq(i) {
-  const items = document.querySelectorAll('.faq-item');
-  const isOpen = items[i].classList.toggle('open');
-  const btn = items[i].querySelector('button');
-  if (btn) btn.setAttribute('aria-expanded', String(isOpen));
+  // start counters
+  setTimeout(()=>startCounters('.stat-num[data-count]'), 1200);
 }
 
-// Smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    e.preventDefault();
-    const t = document.querySelector(a.getAttribute('href'));
-    if (t) t.scrollIntoView({ behavior:'smooth', block:'start' });
+/* ── SCROLL NAV ──────────────────────────── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('solid', window.scrollY>60);
+});
+
+/* ── MOBILE MENU ─────────────────────────── */
+document.getElementById('ham').addEventListener('click',()=>{
+  document.getElementById('mob-menu').classList.toggle('open');
+});
+function closeMob(){document.getElementById('mob-menu').classList.remove('open');}
+
+/* ── SCROLL REVEALS ──────────────────────── */
+const revealCfg = { start:'top 84%', toggleActions:'play none none none' };
+gsap.utils.toArray('.reveal').forEach((el,i)=>{
+  gsap.to(el,{ scrollTrigger:{trigger:el,...revealCfg}, opacity:1,y:0, duration:.75, delay:i*.04>0.25?0.25:i*.04, ease:'power3.out'});
+});
+gsap.utils.toArray('.reveal-l').forEach(el=>{
+  gsap.to(el,{ scrollTrigger:{trigger:el,...revealCfg}, opacity:1,x:0, duration:.8, ease:'power3.out'});
+});
+gsap.utils.toArray('.reveal-r').forEach(el=>{
+  gsap.to(el,{ scrollTrigger:{trigger:el,...revealCfg}, opacity:1,x:0, duration:.8, ease:'power3.out'});
+});
+gsap.utils.toArray('.reveal-s').forEach(el=>{
+  gsap.to(el,{ scrollTrigger:{trigger:el,...revealCfg}, opacity:1,scale:1, duration:.9, ease:'back.out(1.4)'});
+});
+
+/* ── PARALLAX ORBS ───────────────────────── */
+window.addEventListener('mousemove', e => {
+  const x = (e.clientX/window.innerWidth - .5);
+  const y = (e.clientY/window.innerHeight - .5);
+  gsap.to('.orb',{x:x*30,y:y*20,duration:1.2,ease:'power1.out'});
+});
+
+/* ── NUMBER COUNTERS ─────────────────────── */
+function startCounters(selector){
+  document.querySelectorAll(selector).forEach(el=>{
+    const target = +el.dataset.count;
+    const fmt = el.dataset.format;
+    if(fmt){return;} // static display
+    gsap.from({v:0},{v:target,duration:1.8,ease:'power2.out',
+      onUpdate:function(){ el.textContent = Math.floor(this.targets()[0].v).toLocaleString(); },
+      scrollTrigger:{trigger:el,start:'top 85%',once:true}
+    });
+    gsap.to({v:0},{v:target,duration:1.8,ease:'power2.out',
+      onUpdate:function(){
+        const suffix = el.dataset.suffix||'';
+        el.textContent = Math.floor(this.targets()[0].v).toLocaleString()+suffix;
+      }
+    });
   });
+}
+// project counters
+gsap.utils.toArray('.feat-num[data-count]').forEach(el=>{
+  const t=+el.dataset.count;
+  ScrollTrigger.create({trigger:el,start:'top 85%',once:true,onEnter:()=>{
+    gsap.from({v:0},{v:t,duration:1.6,ease:'power2.out',
+      onUpdate:function(){el.textContent=Math.floor(this.targets()[0].v);} });
+    gsap.to({v:0},{v:t,duration:1.6,ease:'power2.out',
+      onUpdate:function(){el.textContent=Math.floor(this.targets()[0].v);} });
+  }});
+});
+
+/* ── CHARTS ──────────────────────────────── */
+const months=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+new Chart(document.getElementById('roiChart'),{
+  type:'line',
+  data:{labels:months,datasets:[
+    {label:'ROI',data:[100,107,112,109,117,122,118,128,132,137,142,150],borderColor:'#C9A84C',backgroundColor:'rgba(201,168,76,0.06)',borderWidth:2,pointRadius:0,fill:true,tension:.45},
+    {label:'Divid.',data:[80,87,92,96,102,108,110,118,124,129,134,140],borderColor:'#00FF88',backgroundColor:'rgba(0,255,136,0.04)',borderWidth:1.5,pointRadius:0,fill:true,tension:.45}
+  ]},
+  options:{responsive:true,plugins:{legend:{labels:{color:'rgba(255,255,255,.45)',font:{size:10,family:"'Inter'"},boxWidth:10}}},scales:{x:{grid:{color:'rgba(255,255,255,.02)'},ticks:{color:'rgba(255,255,255,.35)',font:{size:9}}},y:{grid:{color:'rgba(255,255,255,.02)'},ticks:{color:'rgba(255,255,255,.35)',font:{size:9}}}}}
+});
+new Chart(document.getElementById('dashChart'),{
+  type:'line',
+  data:{labels:new Array(20).fill(''),datasets:[{data:[100,101,103,107,110,108,114,118,122,119,126,130,134,131,138,143,146,149,152,157],borderColor:'#00D4FF',backgroundColor:'rgba(0,212,255,0.06)',borderWidth:1.5,pointRadius:0,fill:true,tension:.45}]},
+  options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}
+});
+
+/* ── FAQ ─────────────────────────────────── */
+[
+  ['¿Qué es Smart Home Token AI?','Plataforma de inversión inmobiliaria tokenizada respaldada por activos reales. Combinamos blockchain, IA y real estate para generar ingresos pasivos mensuales.'],
+  ['¿Cuánto cuesta invertir?','Desde US$1,000 por token. Cada apartamento = 100 tokens. Puedes adquirir múltiples tokens para incrementar tu participación.'],
+  ['¿Cómo recibo mis ganancias?','Dividendos mensuales automáticos distribuidos vía smart contract directamente a tu wallet.'],
+  ['¿Los activos son reales?','Sí. Smart Home Tower 1 es un edificio de 186 apartamentos en Chapinero, Bogotá, con construcción verificable.'],
+  ['¿Qué blockchain utilizan?','Token ERC-20 sobre Ethereum. Contrato auditado, verificable públicamente en la blockchain.'],
+  ['¿Cómo participo?','Escríbenos vía WhatsApp al 302 301 6241 para recibir el deck oficial y reservar tus tokens.'],
+].forEach(([q,a],i)=>{
+  const div=document.createElement('div');div.className='faq-item';
+  div.innerHTML=`<button class="faq-q"><span>${q}</span><div class="faq-icon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button><div class="faq-a"><p>${a}</p></div>`;
+  div.querySelector('.faq-q').onclick=()=>div.classList.toggle('open');
+  document.getElementById('faq-list').appendChild(div);
 });
 </script>
 </body>

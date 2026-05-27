@@ -442,9 +442,14 @@ footer{background:var(--bg3);border-top:1px solid rgba(212,168,76,.18);padding:2
   .nav-logo img{height:52px}
 
   /* hero */
-  #hero{padding-top:4rem}
+  #hero{padding-top:4rem;overflow-x:hidden}
+  .hero-inner{padding:1rem 1.25rem 0!important}
+  .hero-left{min-width:0;max-width:100%}
   .hero-h1{font-size:clamp(1.9rem,9vw,3rem);letter-spacing:-.01em}
-  .hero-sub{font-size:.92rem}
+  .hero-sub{font-size:.92rem;max-width:100%;box-sizing:border-box}
+  .hero-btns{flex-direction:column!important;align-items:stretch!important;width:100%}
+  .hero-btns .btn{width:100%!important;justify-content:center!important;box-sizing:border-box;min-width:0}
+  .hero-right{max-width:100%!important;overflow:hidden;padding:0 0 1rem!important}
   .stat-card{padding:.8rem .6rem}
   .stat-num{font-size:1.5rem}
 

@@ -34,37 +34,64 @@ body:hover #cur{opacity:1}
 
 /* ─── LOADER ───────────────────────────────────────── */
 #loader{position:fixed;inset:0;z-index:9000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
-#loader-canvas{position:absolute;inset:0;pointer-events:none}
-/* corner brackets */
-.loader-corner{position:absolute;width:48px;height:48px;z-index:4;opacity:0}
-.lc-tl{top:22px;left:22px;border-top:2px solid var(--gold);border-left:2px solid var(--gold);border-radius:3px 0 0 0}
-.lc-tr{top:22px;right:22px;border-top:2px solid var(--gold);border-right:2px solid var(--gold);border-radius:0 3px 0 0}
-.lc-bl{bottom:22px;left:22px;border-bottom:2px solid var(--gold);border-left:2px solid var(--gold);border-radius:0 0 0 3px}
-.lc-br{bottom:22px;right:22px;border-bottom:2px solid var(--gold);border-right:2px solid var(--gold);border-radius:0 0 3px 0}
-/* scan line */
-.loader-scan{position:absolute;left:0;right:0;height:1px;top:-2px;background:linear-gradient(90deg,transparent 0%,rgba(0,212,255,.3) 20%,rgba(201,168,76,.9) 50%,rgba(0,212,255,.3) 80%,transparent 100%);z-index:3;opacity:0;box-shadow:0 0 16px rgba(201,168,76,.6)}
-/* rings */
-.loader-rings-wrap{position:relative;width:140px;height:140px;display:flex;align-items:center;justify-content:center;margin-bottom:1.8rem}
-.l-ring{position:absolute;border-radius:50%;opacity:0}
-.lr-a{inset:-24px;border:1.5px solid rgba(201,168,76,.55)}
-.lr-b{inset:-50px;border:1px solid rgba(201,168,76,.28)}
-.lr-c{inset:-78px;border:1px solid rgba(201,168,76,.12)}
-@keyframes lring-pulse{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.35);opacity:0}}
-.lring-anim-a{animation:lring-pulse 2.4s ease-out infinite}
-.lring-anim-b{animation:lring-pulse 2.4s ease-out .8s infinite}
-.lring-anim-c{animation:lring-pulse 2.4s ease-out 1.6s infinite}
-/* logo */
-.loader-logo{position:relative;z-index:2;opacity:0;transform:scale(.45);width:140px;height:140px;display:flex;align-items:center;justify-content:center}
-.loader-logo img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 28px rgba(201,168,76,.8)) drop-shadow(0 0 70px rgba(201,168,76,.3))}
-.loader-brand{font-size:.9rem;font-weight:800;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-l);opacity:0;position:relative;z-index:2}
-.loader-sub{font-size:.58rem;letter-spacing:.28em;color:rgba(255,255,255,.3);opacity:0;margin-top:.4rem;font-family:'Inter',sans-serif;position:relative;z-index:2}
-.loader-bar-wrap{width:240px;height:1.5px;background:rgba(255,255,255,.05);border-radius:1px;margin-top:2.2rem;position:relative;z-index:2;overflow:hidden}
-.loader-bar{height:100%;width:0;background:linear-gradient(90deg,var(--gold-d),var(--gold-l),var(--neon));border-radius:1px;box-shadow:0 0 10px var(--gold),0 0 24px rgba(201,168,76,.35)}
-.loader-pct{font-size:.65rem;font-family:'Space Grotesk',sans-serif;font-weight:700;color:rgba(255,255,255,.38);margin-top:.65rem;letter-spacing:.12em;position:relative;z-index:2}
-/* split panels for exit */
-.loader-panel{position:absolute;top:0;width:50%;height:100%;background:var(--bg);z-index:10}
-.loader-panel.left{left:0}
-.loader-panel.right{right:0}
+#l-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
+/* hex dot grid */
+#l-hex{position:absolute;inset:0;z-index:0;opacity:0;
+  background-image:radial-gradient(circle,rgba(201,168,76,.065) 1px,transparent 1px),radial-gradient(circle,rgba(0,212,255,.04) 1px,transparent 1px);
+  background-size:36px 36px,72px 72px;background-position:0 0,18px 18px;
+  transition:opacity 1.8s ease}
+#l-hex.on{opacity:1}
+/* SVG corner brackets */
+.l-brk{position:absolute;z-index:4;opacity:0;width:64px;height:64px;overflow:visible}
+.l-brk-tl{top:18px;left:18px}
+.l-brk-tr{top:18px;right:18px;transform:scaleX(-1)}
+.l-brk-bl{bottom:18px;left:18px;transform:scaleY(-1)}
+.l-brk-br{bottom:18px;right:18px;transform:scale(-1,-1)}
+.l-brk-p{fill:none;stroke:var(--gold);stroke-width:2;stroke-linecap:square;stroke-dasharray:96;stroke-dashoffset:96}
+@keyframes l-brk-draw{to{stroke-dashoffset:0}}
+/* scan beam */
+#l-scan{position:absolute;left:0;right:0;top:-2px;height:1.5px;z-index:5;opacity:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(0,212,255,.2) 20%,rgba(201,168,76,1) 50%,rgba(0,212,255,.2) 80%,transparent 100%);
+  box-shadow:0 0 20px 3px rgba(201,168,76,.5),0 0 8px rgba(0,212,255,.3)}
+/* orbit system */
+.l-orbit{position:relative;width:200px;height:200px;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;flex-shrink:0}
+.l-or{position:absolute;border-radius:50%;opacity:0;border-style:solid}
+.l-or-1{inset:0;border-width:1px;border-color:rgba(201,168,76,.45) rgba(201,168,76,.1) rgba(201,168,76,.45) rgba(201,168,76,.1);animation:l-cw 9s linear infinite}
+.l-or-2{inset:24px;border-width:1px;border-color:rgba(0,212,255,.35) transparent rgba(0,212,255,.15) transparent;animation:l-ccw 13s linear infinite}
+.l-or-3{inset:48px;border-width:.5px;border-color:rgba(255,255,255,.07) transparent;animation:l-cw 22s linear infinite}
+@keyframes l-cw{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes l-ccw{from{transform:rotate(0deg)}to{transform:rotate(-360deg)}}
+/* orbit dots — 3 evenly spaced, ride outer ring */
+.l-odw{position:absolute;inset:0;border-radius:50%}
+.l-odw-a{animation:l-cw 9s linear infinite}
+.l-odw-b{animation:l-cw 9s linear -3s infinite}
+.l-odw-c{animation:l-cw 9s linear -6s infinite}
+.l-od{position:absolute;width:7px;height:7px;border-radius:50%;top:-3.5px;left:calc(50% - 3.5px);opacity:0}
+.l-od-a{background:var(--gold);box-shadow:0 0 8px var(--gold),0 0 18px rgba(201,168,76,.5)}
+.l-od-b{background:var(--blue);box-shadow:0 0 7px var(--blue),0 0 14px rgba(0,212,255,.4)}
+.l-od-c{background:rgba(201,168,76,.4);box-shadow:0 0 5px rgba(201,168,76,.45)}
+/* logo centerpiece */
+#l-logo{position:absolute;width:120px;height:120px;display:flex;align-items:center;justify-content:center;z-index:2;opacity:0}
+#l-logo::before{content:'';position:absolute;inset:-16px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.2) 0%,rgba(201,168,76,.07) 45%,transparent 70%);pointer-events:none}
+#l-logo img{width:120px;height:120px;object-fit:contain;
+  filter:drop-shadow(0 0 18px rgba(201,168,76,.75)) drop-shadow(0 0 45px rgba(201,168,76,.25)) drop-shadow(0 3px 12px rgba(0,0,0,.7))}
+/* text block */
+.l-text{position:relative;z-index:2;text-align:center}
+.l-brow{display:flex;align-items:center;justify-content:center;overflow:hidden;height:1.4em}
+.l-ch{display:inline-block;font-size:.88rem;font-weight:800;letter-spacing:.2em;color:var(--gold-l)}
+.l-sp{display:inline-block;width:.2em}
+.l-sub{font-size:.58rem;letter-spacing:.25em;color:rgba(255,255,255,.27);font-family:'Inter',sans-serif;margin-top:.5rem}
+/* progress */
+.l-prog{position:relative;z-index:2;width:220px;margin-top:1.8rem}
+.l-bt{height:1.5px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
+.l-bf{height:100%;width:0;background:linear-gradient(90deg,var(--gold-d),var(--gold-l) 55%,var(--neon));border-radius:2px;box-shadow:0 0 10px rgba(201,168,76,.55),0 0 22px rgba(201,168,76,.2);position:relative}
+.l-bf::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);background-size:60px 100%;animation:l-shim 1.1s linear infinite}
+@keyframes l-shim{from{background-position:-60px 0}to{background-position:220px 0}}
+.l-pct{text-align:right;font-size:.6rem;font-family:'Space Grotesk',sans-serif;font-weight:700;color:rgba(255,255,255,.32);letter-spacing:.1em;margin-top:.45rem}
+/* exit panels */
+.l-pnl{position:absolute;top:0;width:50%;height:100%;background:var(--bg);z-index:10}
+.l-pnl-l{left:0}
+.l-pnl-r{right:0}
 
 /* ─── GRID BG ──────────────────────────────────────── */
 .grid-bg{background-image:linear-gradient(rgba(201,168,76,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.025) 1px,transparent 1px);background-size:64px 64px}
@@ -295,32 +322,48 @@ footer{background:var(--bg3);border-top:1px solid rgba(201,168,76,.08);padding:2
 
 <!-- ══════════ LOADER ══════════ -->
 <div id="loader">
-  <canvas id="loader-canvas"></canvas>
-  <!-- corner brackets -->
-  <div class="loader-corner lc-tl"></div>
-  <div class="loader-corner lc-tr"></div>
-  <div class="loader-corner lc-bl"></div>
-  <div class="loader-corner lc-br"></div>
-  <!-- scan line -->
-  <div class="loader-scan" id="lscan"></div>
+  <canvas id="l-canvas"></canvas>
+  <div id="l-hex"></div>
+
+  <!-- SVG corner brackets — draw in via stroke-dashoffset -->
+  <svg class="l-brk l-brk-tl" viewBox="0 0 64 64"><path class="l-brk-p" d="M54,2 L2,2 L2,54"/></svg>
+  <svg class="l-brk l-brk-tr" viewBox="0 0 64 64"><path class="l-brk-p" d="M54,2 L2,2 L2,54"/></svg>
+  <svg class="l-brk l-brk-bl" viewBox="0 0 64 64"><path class="l-brk-p" d="M54,2 L2,2 L2,54"/></svg>
+  <svg class="l-brk l-brk-br" viewBox="0 0 64 64"><path class="l-brk-p" d="M54,2 L2,2 L2,54"/></svg>
+
+  <!-- scan beam -->
+  <div id="l-scan"></div>
+
   <!-- exit panels -->
-  <div class="loader-panel left" id="lp-l"></div>
-  <div class="loader-panel right" id="lp-r"></div>
-  <!-- rings + logo -->
-  <div class="loader-rings-wrap">
-    <div class="l-ring lr-a" id="lra"></div>
-    <div class="l-ring lr-b" id="lrb"></div>
-    <div class="l-ring lr-c" id="lrc"></div>
-    <div class="loader-logo" id="ll">
-      <img src="logoia.png" alt="SHTAI">
+  <div class="l-pnl l-pnl-l" id="lp-l"></div>
+  <div class="l-pnl l-pnl-r" id="lp-r"></div>
+
+  <!-- orbit rings + dots + logo -->
+  <div class="l-orbit">
+    <div class="l-or l-or-1"></div>
+    <div class="l-or l-or-2"></div>
+    <div class="l-or l-or-3"></div>
+    <!-- 3 dots equally spaced on outer ring -->
+    <div class="l-odw l-odw-a"><div class="l-od l-od-a"></div></div>
+    <div class="l-odw l-odw-b"><div class="l-od l-od-b"></div></div>
+    <div class="l-odw l-odw-c"><div class="l-od l-od-c"></div></div>
+    <!-- logo — high quality, centered -->
+    <div id="l-logo">
+      <img src="logoia.png" alt="Smart Home Token AI" width="120" height="120">
     </div>
   </div>
-  <div class="loader-brand" id="lb">SMART HOME TOKEN AI</div>
-  <div class="loader-sub" id="ls">INNOVATE · TOKENIZE · AUTOMATE · EARN</div>
-  <div class="loader-bar-wrap">
-    <div class="loader-bar" id="lbar"></div>
+
+  <!-- brand text (chars built by JS) -->
+  <div class="l-text">
+    <div class="l-brow" id="l-brow"></div>
+    <div class="l-sub" id="l-sub">INNOVATE · TOKENIZE · AUTOMATE · EARN</div>
   </div>
-  <div class="loader-pct" id="lpct">0%</div>
+
+  <!-- progress -->
+  <div class="l-prog">
+    <div class="l-bt"><div class="l-bf" id="l-bf"></div></div>
+    <div class="l-pct" id="l-pct">0%</div>
+  </div>
 </div>
 
 <!-- ══════════ NAV ══════════ -->
@@ -881,106 +924,129 @@ document.querySelectorAll('.magnetic').forEach(el => {
 
 /* ── LOADER ──────────────────────────────── */
 (function(){
-  // Particles + circuit lines
-  const c = document.getElementById('loader-canvas');
-  const ct = c.getContext('2d');
-  c.width = window.innerWidth; c.height = window.innerHeight;
-  const cx2 = c.width/2, cy2 = c.height/2;
-  const pts = Array.from({length:65},()=>({
-    x:Math.random()*c.width, y:Math.random()*c.height,
-    r:Math.random()*1.3+.25, dx:(Math.random()-.5)*.3, dy:(Math.random()-.5)*.3,
-    a:Math.random()*.35+.06,
-    col:[['201,168,76'],['0,212,255'],['0,255,136']][Math.floor(Math.random()*3)]
+  /* ── canvas: particles + circuit spokes ── */
+  const cv=document.getElementById('l-canvas');
+  const ct=cv.getContext('2d');
+  cv.width=window.innerWidth; cv.height=window.innerHeight;
+  const W=cv.width,H=cv.height,CX=W/2,CY=H/2;
+  const pts=Array.from({length:65},()=>({
+    x:Math.random()*W, y:Math.random()*H,
+    r:Math.random()*1.2+.25,
+    dx:(Math.random()-.5)*.28, dy:(Math.random()-.5)*.28,
+    a:Math.random()*.28+.06,
+    col:['201,168,76','0,212,255','0,255,136'][Math.floor(Math.random()*3)]
   }));
-  // static circuit nodes (decorative)
-  const nodes = [
-    {x:cx2-200,y:cy2-120},{x:cx2+200,y:cy2-120},
-    {x:cx2-220,y:cy2+100},{x:cx2+220,y:cy2+100},
-    {x:cx2-300,y:cy2},{x:cx2+300,y:cy2}
+  const spokes=[
+    {ax:CX-220,ay:CY-90},{ax:CX+220,ay:CY-90},
+    {ax:CX-240,ay:CY+80},{ax:CX+240,ay:CY+80},
+    {ax:CX,ay:CY-250},{ax:CX,ay:CY+250}
   ];
-  let lraf, circProgress=0;
+  let lraf,circProg=0;
   function lDraw(){
-    ct.clearRect(0,0,c.width,c.height);
-    // circuit lines radiating from center
-    if(circProgress<1){circProgress+=.006;}
-    ct.save();
-    nodes.forEach((n,i)=>{
-      const prog = Math.min(1,(circProgress-(i*.12))*1.8);
-      if(prog<=0)return;
-      const ix = cx2+(n.x-cx2)*prog, iy = cy2+(n.y-cy2)*prog;
-      ct.beginPath();ct.moveTo(cx2,cy2);ct.lineTo(ix,iy);
-      ct.strokeStyle='rgba(201,168,76,0.12)';ct.lineWidth=.8;ct.stroke();
-      if(prog>=1){ct.beginPath();ct.arc(n.x,n.y,3,0,Math.PI*2);ct.fillStyle='rgba(201,168,76,0.4)';ct.fill();}
+    ct.clearRect(0,0,W,H);
+    if(circProg<1) circProg+=.004;
+    spokes.forEach((s,i)=>{
+      const p=Math.min(1,(circProg-i*.1)*1.6); if(p<=0)return;
+      const ex=CX+(s.ax-CX)*p, ey=CY+(s.ay-CY)*p;
+      ct.beginPath();ct.moveTo(CX,CY);ct.lineTo(ex,ey);
+      ct.strokeStyle='rgba(201,168,76,.09)';ct.lineWidth=.6;ct.stroke();
+      if(p>=1){ct.beginPath();ct.arc(s.ax,s.ay,2,0,Math.PI*2);ct.fillStyle='rgba(201,168,76,.3)';ct.fill();}
     });
-    ct.restore();
-    // particles
     pts.forEach(p=>{
       ct.beginPath();ct.arc(p.x,p.y,p.r,0,Math.PI*2);
       ct.fillStyle=`rgba(${p.col},${p.a})`;ct.fill();
       p.x+=p.dx;p.y+=p.dy;
-      if(p.x<0||p.x>c.width)p.dx*=-1;
-      if(p.y<0||p.y>c.height)p.dy*=-1;
+      if(p.x<0||p.x>W)p.dx*=-1;if(p.y<0||p.y>H)p.dy*=-1;
     });
-    for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+    for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){
       const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
       if(d<80){ct.beginPath();ct.moveTo(pts[i].x,pts[i].y);ct.lineTo(pts[j].x,pts[j].y);
-        ct.strokeStyle=`rgba(201,168,76,${(1-d/80)*.05})`;ct.lineWidth=.4;ct.stroke();}
+        ct.strokeStyle=`rgba(201,168,76,${(1-d/80)*.04})`;ct.lineWidth=.35;ct.stroke();}
     }
     lraf=requestAnimationFrame(lDraw);
   }
   lDraw();
 
-  // set initial GSAP positions
-  gsap.set('#lb',{y:14,opacity:0});
-  gsap.set('#ls',{y:10,opacity:0});
+  /* ── build brand character spans ── */
+  const brow=document.getElementById('l-brow');
+  'SMART HOME TOKEN AI'.split('').forEach(ch=>{
+    const s=document.createElement('span');
+    s.className=ch===' '?'l-sp':'l-ch';
+    if(ch!==' ')s.textContent=ch;
+    brow.appendChild(s);
+  });
 
-  // GSAP timeline — professional sequence
-  const tl = gsap.timeline();
+  /* ── initial states via GSAP ── */
+  gsap.set('.l-brk',{opacity:0});
+  gsap.set('#l-scan',{opacity:0,top:'-2px'});
+  gsap.set('#l-logo',{opacity:0,scale:.4});
+  gsap.set('.l-or,.l-od',{opacity:0});
+  gsap.set('.l-ch',{opacity:0,y:'115%',filter:'blur(5px)'});
+  gsap.set('.l-sub',{opacity:0,y:8});
+  gsap.set('.l-pct',{opacity:0});
+
+  /* ── hex grid materialises ── */
+  setTimeout(()=>document.getElementById('l-hex').classList.add('on'),150);
+
+  /* ── master timeline ── */
+  const tl=gsap.timeline();
   tl
-    // 1. Corner brackets snap in
-    .to('.loader-corner',{opacity:1,duration:.35,stagger:.07,ease:'power2.out',delay:.1})
-    // 2. Scan line sweeps top → bottom
-    .set('#lscan',{opacity:1,top:'-2px'})
-    .to('#lscan',{top:'101%',duration:.75,ease:'power1.inOut',
-      onComplete:()=>gsap.set('#lscan',{opacity:0})
-    },'-=.05')
-    // 3. Logo materialises
-    .to('#ll',{opacity:1,scale:1,duration:.9,ease:'back.out(2)'},'-=.35')
-    // 4. Rings expand in sequence
-    .to(['#lra','#lrb','#lrc'],{opacity:1,duration:.45,stagger:.14,ease:'power2.out'},'-=.5')
-    // 5. Activate ring pulse animation
+    /* 1 — corner brackets appear + SVG draw */
+    .to('.l-brk',{opacity:1,duration:.35,stagger:.08,ease:'power2.out'},0.08)
     .add(()=>{
-      document.getElementById('lra').classList.add('lring-anim-a');
-      document.getElementById('lrb').classList.add('lring-anim-b');
-      document.getElementById('lrc').classList.add('lring-anim-c');
-    })
-    // 6. Brand text slides up
-    .to('#lb',{opacity:1,y:0,duration:.65,ease:'power3.out'},'-=.25')
-    .to('#ls',{opacity:1,y:0,duration:.5,ease:'power2.out'},'-=.35')
-    // 7. Progress bar
-    .to('.loader-bar',{
-      width:'100%',duration:1.85,ease:'power2.inOut',
+      document.querySelectorAll('.l-brk-p').forEach((p,i)=>{
+        p.style.animation=`l-brk-draw .55s ${i*.09}s ease-out forwards`;
+      });
+    },0.08)
+    /* 2 — scan beam sweeps */
+    .set('#l-scan',{opacity:1,top:'-2px'},0.52)
+    .to('#l-scan',{top:'102%',duration:.55,ease:'power1.inOut'},0.52)
+    .set('#l-scan',{opacity:0},1.1)
+    /* 3 — logo materialises with spring */
+    .to('#l-logo',{opacity:1,scale:1,duration:.9,ease:'back.out(2.2)'},0.72)
+    /* 4 — orbit rings appear */
+    .to('.l-or-1',{opacity:1,duration:.5,ease:'power2.out'},0.88)
+    .to('.l-or-2',{opacity:1,duration:.5,ease:'power2.out'},1.02)
+    .to('.l-or-3',{opacity:.7,duration:.5,ease:'power2.out'},1.15)
+    /* 5 — orbit dots light up */
+    .to('.l-od',{opacity:1,duration:.4,stagger:.13,ease:'power2.out'},1.0)
+    /* 6 — brand chars blur-reveal from below */
+    .to('.l-ch',{opacity:1,y:0,filter:'blur(0px)',duration:.42,stagger:.055,ease:'power3.out'},1.12)
+    /* 7 — tagline + percentage */
+    .to('.l-sub',{opacity:1,y:0,duration:.5,ease:'power2.out'},1.72)
+    .to('.l-pct',{opacity:1,duration:.3},1.72)
+    /* 8 — progress bar with shimmer */
+    .to('.l-bf',{
+      width:'100%',duration:1.9,ease:'power2.inOut',
       onUpdate:function(){
-        const p=Math.round(this.progress()*100);
-        document.getElementById('lpct').textContent=p+'%';
+        document.getElementById('l-pct').textContent=Math.round(this.progress()*100)+'%';
       }
-    },'-=.2')
-    .add(()=>{cancelAnimationFrame(lraf);})
-    // 8. EXIT — logo flare + panel wipe
-    .to('#ll img',{
-      filter:'drop-shadow(0 0 60px rgba(201,168,76,1)) drop-shadow(0 0 130px rgba(201,168,76,.7))',
-      duration:.3,ease:'power2.in'
+    },1.78)
+    .add(()=>cancelAnimationFrame(lraf))
+
+    /* ── EXIT SEQUENCE ── */
+    /* logo gold flare */
+    .to('#l-logo img',{
+      filter:'drop-shadow(0 0 55px rgba(201,168,76,1)) drop-shadow(0 0 110px rgba(201,168,76,.8))',
+      duration:.28,ease:'power2.in'
     })
-    .to('#ll',{scale:1.35,opacity:0,duration:.3,ease:'power3.in'},'-=.1')
-    .to('#lb,#ls,.loader-bar-wrap,#lpct',{opacity:0,y:-16,duration:.25,stagger:.03,ease:'power2.in'},'-=.28')
-    .to('.loader-corner,.l-ring',{opacity:0,duration:.2,ease:'power2.in'},'-=.25')
-    .to('#lp-l',{x:'-101%',duration:.62,ease:'power4.inOut'})
-    .to('#lp-r',{x:'101%',duration:.62,ease:'power4.inOut'},'-=.62')
+    /* rings & dots fade */
+    .to('.l-or',{opacity:0,duration:.28,ease:'power2.in'},'<')
+    .to('.l-od',{opacity:0,duration:.2},'<')
+    /* logo scales up and disappears */
+    .to('#l-logo',{scale:1.45,opacity:0,duration:.32,ease:'power3.in'},'-=.15')
+    /* chars exit upward with blur */
+    .to('.l-ch',{opacity:0,y:'-115%',filter:'blur(4px)',duration:.22,stagger:.02,ease:'power2.in'},'-=.28')
+    .to('.l-sub,.l-pct,.l-bt',{opacity:0,y:-10,duration:.2},'<')
+    .to('.l-brk',{opacity:0,duration:.2},'<')
+    /* panel wipe — left & right simultaneously */
+    .to('#lp-l',{x:'-101%',duration:.65,ease:'power4.inOut'})
+    .to('#lp-r',{x:'101%',duration:.65,ease:'power4.inOut'},'<')
     .to('#loader',{opacity:0,duration:.25,ease:'power2.in',onComplete:()=>{
       document.getElementById('loader').style.display='none';
       document.body.style.overflow='auto';
       heroEntrance();
-    }},'-=.18');
+    }},'-=.2');
 
   document.body.style.overflow='hidden';
 })();
